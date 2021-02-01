@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kevin's Pokedex</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header>
+        <form id="searchForm">
+            <label class="switch">
+                <input id="searchToggle" type="checkbox" onclick="toggleSearchType()">
+                <span class="slider"></span>
+              </label>
+            <input type="search" id="searchBar" placeholder="Search for a Pokemon...">
+            <button>Search</button>
+        </form>
+        
+    </header>
+
+    <section id="overlayID">
+        <div id="bigPicWrapper">
+            <div class="titleContainer">
+                <h1 id="overlayName"></h1>
+            </div>
+
+            <img id="overlaySprite" src="">
+            
+            <div id="physDetails">
+
+            </div>
+
+            <div id="typeDetails">
+
+            </div>
+
+            <div id="evolChain">
+
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <div id="pokemonGrid">
+
+        </div>
+    </main>
+
+    <footer>
+        /*INSERT FOOTER CONTENT*/
+    </footer>
+    <script src="./script2.js"></script>
+</body>
+
+</html>
