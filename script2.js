@@ -29,68 +29,69 @@ features to add:
 const promises = [];
 
 for (let i = 1; i < 899; i++) {
-    const url = "https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/";
-    promises.push(fetch(url)
-            .then(response => {
-                return response.json();
-            })
-            .catch(err => {
-                console.log(err)
-            }));
+    promises.push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
 }
 
-Promise.all(promises).then(results => {
-    const pokemonData = results.map(pokemon => {
-        return {
-            name: pokemon.name,
-            id: pokemon.id,
-            type: getType(pokemon),
-            sprite: pokemon.sprites.front_default,
-            offArt: pokemon.sprites.other["official-artwork"].front_default,
-            stats: getStats(pokemon),
-            abilities: getAbilities(pokemon),
-            height: String(0.1 * pokemon.height) + " m",
-            weight: String(0.1 * pokemon.weight) + " kg"
-        };
-
+Promise.all(promises)
+    .then(responses => {
+        return Promise.all(responses.map(response => {
+            return response.json();
+        }))
     })
+    .then(results => {
+        const pokemonData = results.map(pokemon => {
+            return {
+                name: pokemon.name,
+                id: pokemon.id,
+                type: getType(pokemon),
+                sprite: pokemon.sprites.front_default,
+                offArt: pokemon.sprites.other["official-artwork"].front_default,
+                stats: getStats(pokemon),
+                abilities: getAbilities(pokemon),
+                height: String(0.1 * pokemon.height) + " m",
+                weight: String(0.1 * pokemon.weight) + " kg"
+            };
+        })
 
-    addCards(pokemonData);
-    console.log(results);
-    console.log(pokemonData);
+        addCards(pokemonData);
+        console.log(results);
+        console.log(pokemonData);
 
-    document.getElementById("searchBar").addEventListener("keyup", (e) => {
-        const pokeCardList = document.getElementsByClassName("pokemonCard"),
-            input = e.target.value.toLowerCase();
-        if (input === "") {
-            for (let i = 0; i < pokeCardList.length; i++) {
-                pokeCardList[i].style.display = "grid";
-            }
-        }
-        else {
-            if (toggleSearchType()) {
-                searchForCardType(pokeCardList, input);
+        document.getElementById("searchBar").addEventListener("keyup", (e) => {
+            const pokeCardList = document.getElementsByClassName("pokemonCard"),
+                input = e.target.value.toLowerCase();
+            if (input === "") {
+                for (let i = 0; i < pokeCardList.length; i++) {
+                    pokeCardList[i].style.display = "grid";
+                }
             }
             else {
-                searchForCardName(pokeCardList, input);
+                if (toggleSearchType()) {
+                    searchForCardType(pokeCardList, input);
+                }
+                else {
+                    searchForCardName(pokeCardList, input);
+                }
+                
             }
-            
-        }
-    });
+        });
 
-    document.addEventListener("click", (e) => {
-        e = e || window.event;
-        let target = e.target;
-        let isFocused = document.getElementById("overlayID").style.display === "block";
-    
-        if (isFocused && !document.getElementById("bigPicWrapper").contains(target)) {
-            closeFocusedPicture();
-        }
-        else if (!isFocused && target.classList.contains("transpCardCover")) {
-            setFocusedPicture(pokemonData[parseInt(target.parentNode.id) - 1]);
-        }
-    }, false);
-});
+        document.addEventListener("click", (e) => {
+            e = e || window.event;
+            let target = e.target;
+            let isFocused = document.getElementById("overlayID").style.display === "block";
+        
+            if (isFocused && !document.getElementById("bigPicWrapper").contains(target)) {
+                closeFocusedPicture();
+            }
+            else if (!isFocused && target.classList.contains("transpCardCover")) {
+                setFocusedPicture(pokemonData[parseInt(target.parentNode.id) - 1]);
+            }
+        }, false);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 
 function getType(pokemon) {
     /* get the type(s) of the pokemon */
