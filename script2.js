@@ -135,6 +135,7 @@ function createPokemonCard(pokemon) {
 
     // create the sprite image element
     cardSprite.setAttribute("class", "cardSprite");
+    cardSprite.setAttribute("loading", "lazy");
     cardSprite.src = pokemon.sprite;
     
     // create text container div element
@@ -148,7 +149,7 @@ function createPokemonCard(pokemon) {
     cardTypeList.setAttribute("class", "cardTypeList");
     pokemon.type.forEach(t => {
         let li = document.createElement("li");
-        li.setAttribute("class", "type");
+        li.setAttribute("class", "bg-color-" + t);
         li.appendChild(document.createTextNode(t));
         cardTypeList.appendChild(li);
     });
