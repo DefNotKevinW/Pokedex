@@ -64,7 +64,7 @@ Promise.all(promises).then(results => {
             input = e.target.value.toLowerCase();
         if (input === "") {
             for (let i = 0; i < pokeCardList.length; i++) {
-                pokeCardList[i].style.display = "block";
+                pokeCardList[i].style.display = "grid";
             }
         }
         else {
