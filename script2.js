@@ -141,7 +141,8 @@ function createPokemonCard(pokemon) {
         cardName = document.createElement("h3"),
         cardTypeList = document.createElement("ul"),
         transpCover = document.createElement("div"),
-        contentWrapper = document.createElement("div");
+        contentWrapper = document.createElement("div"),
+        pokemonID = document.createElement("p");
 
     // create the card div element
     card.setAttribute("id", String(pokemon.id));
@@ -161,12 +162,10 @@ function createPokemonCard(pokemon) {
 
     // create the card type elements and add them to the type list
     cardTypeList.setAttribute("class", "cardTypeList");
-    pokemon.type.forEach(t => {
-        let li = document.createElement("li");
-        li.setAttribute("class", "bg-color-" + t);
-        li.appendChild(document.createTextNode(t));
-        cardTypeList.appendChild(li);
-    });
+    createTypeLi(cardTypeList, pokemon);
+
+    // create the id p element
+    pokemonID.appendChild(document.createTextNode(formatPokemonId(pokemon.id)));
 
     // create the content wrapper
     contentWrapper.setAttribute("class", "contentWrapper");
@@ -178,12 +177,31 @@ function createPokemonCard(pokemon) {
     contentWrapper.appendChild(cardSprite);
     textContainer.appendChild(cardName);
     textContainer.appendChild(cardTypeList);
+    textContainer.appendChild(pokemonID);
     contentWrapper.appendChild(textContainer);
     card.appendChild(contentWrapper);
     card.appendChild(transpCover);
 
     // add the card to the DOM
     document.getElementById("pokemonGrid").appendChild(card);
+}
+
+function createTypeLi (typeList, pokemon) {
+    pokemon.type.forEach(t => {
+        let li = document.createElement("li");
+        li.setAttribute("class", "bg-color-" + t);
+        li.appendChild(document.createTextNode(t));
+        typeList.appendChild(li);
+    });
+}
+
+function formatPokemonId(id) {
+    if (id > 99) {
+        return "#" + String(id);
+    }
+    else {
+        return "#" + ("0" + ("0" + id).slice(-2)).slice(-3);
+    }
 }
 
 function addCards(pokemonList, gen) {
@@ -194,9 +212,7 @@ function addCards(pokemonList, gen) {
 }
 
 function removeCards(gen) {
-    console.log(gen);
     for (let i = generationToID[gen][0]; i <= generationToID[gen][1]; i++) {
-        console.log(document.getElementById(String(i+1)));
         document.getElementById(String(i + 1)).remove();
     }
 }
@@ -318,14 +334,45 @@ function toggleSearchType() {
 function setFocusedPicture(pokemon) {
     const overlaySprite = document.getElementById("overlaySprite");
 
-    // set the link of the big picture to the new link
+    // set the sprite link
     overlaySprite.src = pokemon.offArt;
+
+    // set the overlay title
+    document.getElementById("overlayName").innerHTML = pokemon.name + " " + formatPokemonId(pokemon.id);
+
+    // set the details of the pokemon (ie. height, weight, abilities)
+    document.getElementById("height").children[1].innerHTML = pokemon.height;
+    document.getElementById("weight").children[1].innerHTML = pokemon.weight;
+
+    abilityList = document.getElementById("abilities").children[1];
+    Object.keys(pokemon.abilities).forEach(ability => {
+        let li = document.createElement("li");
+        if (!pokemon.abilities[ability]) {
+            li.appendChild(document.createTextNode(ability));
+        }
+        else {
+            li.appendChild(document.createTextNode(ability + " (hidden)"));
+        }
+        abilityList.appendChild(li);
+    });
+
+    // create the type list
+    createTypeLi(document.getElementById("overlayTypeList"), pokemon);
+
+    // create the stat list
+    statList = document.getElementById("pokemonStats");
+    Object.keys(pokemon.stats).forEach(stat => {
+        let li = document.createElement("li");
+        li.appendChild(document.createTextNode(stat + ": " + String(pokemon.stats[stat])));
+        statList.appendChild(li);
+    });
+
     document.getElementById("overlayID").style.display = "block";
-
-    document.getElementById("overlayName").innerHTML = pokemon.name + " #" + String(pokemon.id);
-
 }
 
 function closeFocusedPicture() {
     document.getElementById("overlayID").style.display = "none";
+    document.getElementById("pokemonStats").innerHTML = "";
+    document.getElementById("overlayTypeList").innerHTML = "";
+    document.getElementById("abilities").children[1].innerHTML = "";
 }
