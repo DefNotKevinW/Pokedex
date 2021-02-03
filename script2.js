@@ -79,7 +79,7 @@ Promise.all(promises)
                 }
             }
             else {
-                if (toggleSearchType()) {
+                if (false /*toggleSearchType()*/) { // this feature isn't completed yet
                     searchForCardType(pokeCardList, input);
                 }
                 else {
