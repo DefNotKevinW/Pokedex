@@ -26,7 +26,19 @@ features to add:
 - pokemon forms 
 - evolution chain
 */
+const generationToID = {
+    "gen1": [0, 150],
+    "gen2": [151, 250],
+    "gen3": [251, 385],
+    "gen4": [386, 492],
+    "gen5": [493, 648],
+    "gen6": [649, 721],
+    "gen7": [721, 808],
+    "gen8": [809, 897]
+};
+
 const promises = [];
+let pokemonData;
 
 for (let i = 1; i < 899; i++) {
     promises.push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
@@ -39,7 +51,7 @@ Promise.all(promises)
         }))
     })
     .then(results => {
-        const pokemonData = results.map(pokemon => {
+        pokemonData = results.map(pokemon => {
             return {
                 name: pokemon.name,
                 id: pokemon.id,
@@ -53,7 +65,7 @@ Promise.all(promises)
             };
         })
 
-        addCards(pokemonData);
+        addCards(pokemonData, "gen1");
         console.log(results);
         console.log(pokemonData);
 
@@ -91,7 +103,7 @@ Promise.all(promises)
     })
     .catch(err => {
         console.log(err);
-    })
+    });
 
 function getType(pokemon) {
     /* get the type(s) of the pokemon */
@@ -173,10 +185,87 @@ function createPokemonCard(pokemon) {
     document.getElementById("pokemonGrid").appendChild(card);
 }
 
-function addCards(pokemonList) {
+function addCards(pokemonList, gen) {
     /* create a card for each pokemon */
-    for (let i = 0; i < pokemonList.length; i++) {
+    for (let i = generationToID[gen][0]; i <= generationToID[gen][1]; i++) {
         createPokemonCard(pokemonList[i]);
+    }
+}
+
+function removeCards(gen) {
+    console.log(gen);
+    for (let i = generationToID[gen][0]; i <= generationToID[gen][1]; i++) {
+        console.log(document.getElementById(String(i+1)));
+        document.getElementById(String(i + 1)).remove();
+    }
+}
+
+function togglePokemonFromGen(gen) {
+    switch (gen) {
+        case 'gen1':
+            if (document.getElementById("gen1Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen2':
+            if (document.getElementById("gen2Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen3':
+            if (document.getElementById("gen3Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen4':
+            if (document.getElementById("gen4Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen5':
+            if (document.getElementById("gen5Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen6':
+            if (document.getElementById("gen6Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen7':
+            if (document.getElementById("gen7Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
+        case 'gen8':
+            if (document.getElementById("gen8Tog").checked) {
+                addCards(pokemonData, gen);
+            }
+            else {
+                removeCards(gen);
+            }
+            break;
     }
 }
 
