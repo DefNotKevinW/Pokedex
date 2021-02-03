@@ -13,13 +13,19 @@
 
 <body>
     <header>
+
+        <h1>Pokédex</h1>
+
         <form id="searchForm">
             <label class="switch">
                 <input id="searchToggle" type="checkbox" onclick="toggleSearchType()">
                 <span class="slider"></span>
-              </label>
-            <input type="search" id="searchBar" placeholder="Search for a Pokemon...">
-            <button>Search</button>
+            </label>
+            <div class="searchBarContainer">
+                <input type="search" id="searchBar" placeholder="Search for Pokémon">
+                <button id="searchBarBtn"><img src="resources/search bar icon/201-unown-q@3x.png"></button>
+            </div>
+
             <div class=genContainer>
                 <ul class=generationCheckList>
                     <li><input id="gen1Tog" type="checkbox" 
@@ -81,6 +87,8 @@
         </div>
     </section>
 
+    <div id="loading ring" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+
     <main>
         <div id="pokemonGrid">
 
@@ -88,7 +96,6 @@
     </main>
 
     <footer>
-        /*INSERT FOOTER CONTENT*/
     </footer>
     
 </body>

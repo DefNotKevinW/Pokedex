@@ -40,6 +40,8 @@ const generationToID = {
 const promises = [];
 let pokemonData;
 
+document.getElementById("loading ring").classList.add("lds-ring");
+
 for (let i = 1; i < 899; i++) {
     promises.push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
 }
@@ -64,10 +66,9 @@ Promise.all(promises)
                 weight: String(0.1 * pokemon.weight) + " kg"
             };
         })
+        document.getElementById("loading ring").classList.remove("lds-ring");
 
         addCards(pokemonData, "gen1");
-        console.log(results);
-        console.log(pokemonData);
 
         document.getElementById("searchBar").addEventListener("keyup", (e) => {
             const pokeCardList = document.getElementsByClassName("pokemonCard"),

@@ -2,20 +2,79 @@
 
 body {
     font-family: "Ubuntu Mono", monospace;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("./resources/pokemon-background-image/644.svg"),
+        url("./resources/pokemon-background-image/643.svg");
+    background-position: top left, top right;
+    background-repeat: no-repeat;
+    background-color: #212121;
+    height: 400px;
+}
+
+@media only screen and (max-width: 1365px) {
+    header {
+        background-image: url("./resources/pokemon-background-image/491.svg");
+        background-position: center;
+    }
+}
+
+h1 {
+    color: #fff;
+    font-family: "Ubuntu Mono", monospace;
+    font-size: 4rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-top: 0;
+}
+
+#searchForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* SEACH BAR STYLING */
 
+.searchBarContainer {
+    display: flex;
+    flex-direction: row;
+    align-self: flex-start;
+    margin-left: 20px;
+}
+
 #searchBar {
     height: 40px;
-    width: 40%;
-    margin-left: 200px;
     border-radius: 8px;
     font-size: 1.1rem;
+    font-family: "Ubuntu Mono", monospace;
 }
 
 #searchBar:focus {
     outline: none;
+}
+
+#searchBarBtn {
+    margin-left: 5px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+#searchBarBtn:hover {
+    opacity: 85%;
+    cursor: pointer;
+}
+
+#searchBarBtn img {
+    width: 30px;
+    height: auto;
 }
 
 /* SEARCH BAR SWITCH STYLING */
@@ -29,57 +88,58 @@ body {
 
 /* Hide default HTML checkbox */
 .switch input {
-opacity: 0;
-width: 0;
-height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 /* The slider */
 .slider {
-position: absolute;
-cursor: pointer;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: #ccc;
--webkit-transition: .4s;
-transition: .4s;
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .slider:before {
-position: absolute;
-content: "";
-height: 26px;
-width: 26px;
-left: 4px;
-bottom: 4px;
-background-color: white;
--webkit-transition: .4s;
-transition: .4s;
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 input:checked + .slider {
-background-color: #2196F3;
+    background-color: #2196F3;
 }
 
 input:focus + .slider {
-box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #2196F3;
 }
 
 input:checked + .slider:before {
--webkit-transform: translateX(26px);
--ms-transform: translateX(26px);
-transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
 /* Rounded sliders */
 .slider.round {
-border-radius: 34px;
+    border-radius: 34px;
 }
 
 .slider.round:before {
-border-radius: 50%;
+    border-radius: 50%;
 }
 
 /* GENERATION FILTER LIST STYLING */
@@ -98,10 +158,13 @@ border-radius: 50%;
     display: inline;
 }
 
+.generationCheckList li:hover {
+    opacity: 85%;
+}
+
 .generationCheckList li label {
     display: inline-block;
-    background-color: rgba(255, 255, 255, .9);
-    border: 2px solid rgba(139, 139, 139, .3);
+    background-color: #fff;
     color: #adadad;
     padding: 8px 12px;
     cursor: pointer;
@@ -125,21 +188,21 @@ border-radius: 50%;
     -webkit-font-smoothing: antialiased;
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    font-size: 12px;
+    font-size: 0.8rem;
     padding: 2px 6px 2px 2px;
-    content: "\f067";
+    /*content: "\f067";*/
     transition: transform .3s ease-in-out;
 }
 
-.generationCheckList li input[type="checkbox"]:checked + label::before {
+/*.generationCheckList li input[type="checkbox"]:checked + label::before {
     content: "\f00c";
     transform: rotate(-360deg);
     transition: transform .3s ease-in-out;
-}
+}*/
 
 .generationCheckList li input[type="checkbox"]:checked + label {
-    border: 2px solid #1bdbf8;
-    background-color: #12bbd4;
+    border: 2px solid#E3350D;
+    background-color: #E3350D;
     color: #fff;
     transition: all .2s;
 }
@@ -150,9 +213,6 @@ border-radius: 50%;
 .generationCheckList li input[type="checkbox"] {
     position: absolute;
     opacity: 0;
-}
-.generationCheckList li input[type="checkbox"]:focus + label {
-    border: 2px solid #e9a1ff;
 }
 
 /* OVERLAY STYLING */
@@ -194,6 +254,48 @@ main {
     padding-left: 20px;
     padding-right: 20px;
 }
+
+/* LOADING RING */
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #fcf;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fcf transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+/* POKEMON CARDS */
 
 #pokemonGrid {
     display: grid;
