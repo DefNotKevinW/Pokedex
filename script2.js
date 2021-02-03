@@ -62,8 +62,8 @@ Promise.all(promises)
                 offArt: pokemon.sprites.other["official-artwork"].front_default,
                 stats: getStats(pokemon),
                 abilities: getAbilities(pokemon),
-                height: String(0.1 * pokemon.height) + " m",
-                weight: String(0.1 * pokemon.weight) + " kg"
+                height: (0.1 * pokemon.height).toFixed(2) + " m",
+                weight: (0.1 * pokemon.weight).toFixed(2) + " kg"
             };
         })
         document.getElementById("loading ring").classList.remove("lds-ring");
@@ -347,11 +347,16 @@ function setFocusedPicture(pokemon) {
     abilityList = document.getElementById("abilities").children[1];
     Object.keys(pokemon.abilities).forEach(ability => {
         let li = document.createElement("li");
+        let span = document.createElement("span");
         if (!pokemon.abilities[ability]) {
-            li.appendChild(document.createTextNode(ability));
+            span.appendChild(document.createTextNode(ability));
+            span.setAttribute("class", "attributeValue");
+            li.appendChild(span);
         }
         else {
-            li.appendChild(document.createTextNode(ability + " (hidden)"));
+            span.appendChild(document.createTextNode("(" + ability + ")"));
+            span.setAttribute("class", "attributeValue");
+            li.appendChild(span);
         }
         abilityList.appendChild(li);
     });

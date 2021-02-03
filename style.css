@@ -5,6 +5,13 @@ body {
     margin: 0;
 }
 
+ul {
+    list-style: none;
+}
+li {
+    list-style: none;
+}
+
 header {
     display: flex;
     flex-direction: column;
@@ -24,7 +31,7 @@ header {
         background-position: center;
     }
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 413px) {
     header {
         background-image: url("./resources/pokemon-background-image/494.svg");
         background-position: center;
@@ -156,7 +163,6 @@ input:checked + .slider:before {
 }
 
 .generationCheckList {
-    list-style: none;
     padding: 20px;
 }
 
@@ -170,7 +176,7 @@ input:checked + .slider:before {
 
 .generationCheckList li label {
     display: inline-block;
-    background-color: #fff;
+    background-color: #ffffff;
     color: #adadad;
     padding: 8px 12px;
     cursor: pointer;
@@ -207,8 +213,8 @@ input:checked + .slider:before {
 }*/
 
 .generationCheckList li input[type="checkbox"]:checked + label {
-    border: 2px solid#E3350D;
-    background-color: #E3350D;
+    border: 2px solid#FF4136;
+    background-color: #FF4136;
     color: #fff;
     transition: all .2s;
 }
@@ -244,6 +250,44 @@ input:checked + .slider:before {
     z-index: 3;
     background-color: #FAFAFA;
     width: 65%;
+}
+
+.colWrapper {
+    display: flex;
+}
+
+.overlayCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#pokemonDetails {
+    display: flex;
+    flex-direction: row;
+    background-color: #FF4136;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.col ul li {
+    display: flex;
+    flex-direction: column;
+}
+
+.attributeList {
+    padding: 0;
+}
+
+.attributeTitle {
+    color: #FFFFFF;
+}
+
+.attributeValue {
+    color: #001f3f;
 }
 
 /* MAIN BODY STYLING */
@@ -370,12 +414,12 @@ main {
 }
 
 .cardTypeList li {
-    list-style: none;
     margin: 0px 5px 10px 5px;
     padding: 3px 5px;
     width: 4.5rem;
     border-radius: 5px;
     text-align: center;
+    font-size: 1rem;
 }
 
 .textContainer p {
