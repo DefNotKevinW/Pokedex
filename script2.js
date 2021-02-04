@@ -127,7 +127,6 @@ Promise.all(promises[1])
     });
 
 function loadRestOfData() {
-    console.log("hello!");
     for (let i = 49; i < 899; i++) {
         promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
     }
@@ -373,19 +372,6 @@ function displayCards() {
     });
 }
 
-/*function addCards(pokemonList, gen) {
-    /* create a card for each pokemon /
-    for (let i = pokemonIdList[gen][0]; i <= pokemonIdList[gen][1]; i++) {
-        createPokemonCard(pokemonList[i]);
-    }
-}
-
-function removeCards(gen) {
-    for (let i = pokemonIdList[gen][0]; i <= pokemonIdList[gen][1]; i++) {
-        document.getElementById(String(i + 1)).remove();
-    }
-}*/
-
 /*function togglePokemonGen(n) {
     if (genToId["gen" + n][2]) {
         genToId["gen" + n][2] = false;
@@ -395,7 +381,6 @@ function removeCards(gen) {
     }
     //filterPokemonFromGen();
 }*/
-
 
 /*function filterPokemonFromGen() {
     // we want to remove everything thats not in at least one of the chosen generations
@@ -447,45 +432,6 @@ function removeCards(gen) {
 function capitalizeString(string) {
     /* capitalize a string */
     return string[0].toUpperCase() + string.slice(1, string.length);
-}
-
-/*function searchForCardName(cardList, input) {
-    /* search for pokemon by name /
-    for (let i = 0; i < cardList.length; i++) {
-        let cardName = cardList[i].children[0].children[1].children[0].innerHTML;
-        
-        if (cardName.toLowerCase().includes(input)) {
-            cardList[i].style.display = "grid";
-        }
-        else {
-            cardList[i].style.display = "none";
-        }
-    }
-}*/
-
-function searchForCardType(cardList, input) {
-    /* search for pokemon by type */
-    for (let i = 0; i < cardList.length; i++) {
-        let liLst = cardList[i].children[0].children[1].children[1].children, j = 0, typeFound = false;
-        while (j < liLst.length && !typeFound) {
-            if (liLst[j].innerHTML.toLowerCase().includes(input)) {
-                typeFound = true;
-            }
-            j++;
-        }
-        
-        if (typeFound) {
-            cardList[i].style.display = "grid";
-        }
-        else {
-            cardList[i].style.display = "none";
-        }
-    }
-}
-
-function toggleSearchType() {
-    /* returns true if switch is toggled on and false otherwise. */
-    return document.getElementById("searchToggle").checked;
 }
 
 function setFocusedPicture(pokemon) {

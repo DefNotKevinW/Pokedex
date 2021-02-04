@@ -2,6 +2,7 @@
 
 body {
     font-family: "Ubuntu Mono", monospace;
+    text-rendering: optimizeLegibility;
     margin: 0;
 }
 
@@ -251,6 +252,12 @@ input:checked + .slider:before {
     z-index: 3;
     background-color: #FAFAFA;
     width: 65%;
+}
+
+#overlaySprite {
+    height: auto;
+    width: 100%;
+    max-width: 400px;
 }
 
 .colWrapper {
