@@ -37,6 +37,50 @@ let genToId = {
     "gen8": [810, 898, false]
 };
 
+let typeRelations = {
+    typeOrder: {
+        "normal": 0,
+		"fire": 1,
+		"water": 2,
+		"electric": 3,
+		"grass": 4,
+		"ice": 5,
+		"fighting": 6,
+		"poison": 7,
+		"ground": 8,
+		"flying": 9,
+		"psychic": 10,
+		"bug": 11,
+		"rock": 12,
+		"ghost": 13,
+		"dragon": 14,
+		"dark": 15,
+        "steel": 16,
+        "fairy": 17
+    },
+
+    typeChart: {
+        "normal": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
+		"fire": [1, 0.5, 2, 1, 0.5, 0.5, 1, 1, 2, 1, 1, 0.5, 2, 1, 1, 1, 0.5, 0.5],
+		"water": [1, 0.5, 0.5, 2, 2, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5],
+		"electric": [1, 1, 1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1, 1, 0.5, 1],
+		"grass": [1, 2, 0.5, 0.5, 0.5, 2, 1, 2, 0.5, 2, 1, 2, 1, 1, 1, 1, 1, 1],
+		"ice": [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
+		"fighting": [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 0.5, 1, 1, 0.5, 1, 2],
+		"poison": [1, 1, 1, 1, 0.5, 1, 0.5, 0.5, 2, 1, 2, 0.5, 1, 1, 1, 1, 1, 0.5],
+		"ground": [1, 1, 2, 0, 2, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 1, 1, 1, 1, 1],
+		"flying": [1, 1, 1, 2, 0.5, 2, 0.5, 1, 0, 1, 1, 0.5, 2, 1, 1, 1, 1, 1],
+		"psychic": [1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1, 2, 1, 1],
+		"bug": [1, 2, 1, 1, 0.5, 1, 0.5, 1, 0.5, 2, 1, 1, 2, 1, 1, 1, 1, 1],
+		"rock": [0.5, 0.5, 2, 1, 2, 1, 2, 0.5, 2, 0.5, 1, 1, 1, 1, 1, 1, 2, 1],
+		"ghost": [0, 1, 1, 1, 1, 1, 0, 0.5, 1, 1, 1, 0.5, 1, 2, 1, 2, 1, 1],
+		"dragon": [1, 0.5, 0.5, 0.5, 0.5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2],
+		"dark": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 2, 1, 0.5, 1, 0.5, 1, 2],
+        "steel": [0.5, 2, 1, 1, 0.5, 0.5, 2, 0, 2, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 1, 0.5, 0.5],
+        "fairy": [1, 1, 1, 1, 1, 1, 0.5, 2, 1, 1, 1, 0.5, 1, 1, 0, 0.5, 2, 1]
+    }
+}
+
 let pokemonIdList = {
     "queue": [],    // whatever will appear on the DOM is in queue
     "displayed": [] // whatever is on the DOM is in displayed
@@ -105,11 +149,8 @@ Promise.all(promises[1])
             e = e || window.event;
             let target = e.target;
             let isFocused = document.getElementById("overlayID").style.display === "block";
-        
-            if (isFocused && !document.getElementById("bigPicWrapper").contains(target)) {
-                closeFocusedPicture();
-            }
-            else if (!isFocused && target.classList.contains("transpCardCover")) {
+
+            if (!isFocused && target.classList.contains("transpCardCover")) {
                 setFocusedPicture(pokemonData[parseInt(target.parentNode.id) - 1]);
             }
         }, false);
@@ -125,6 +166,8 @@ Promise.all(promises[1])
     .catch(err => {
         console.log(err);
     });
+
+/* DATA LOADING RELATED FUNCTIONS */
 
 function loadRestOfData() {
     for (let i = 49; i < 899; i++) {
@@ -190,78 +233,7 @@ function getAbilities(pokemon) {
     return abilityObj;
 }
 
-function createPokemonCard(id) {
-    const pokemon = pokemonData[id - 1];
-
-    /* create the elements for each pokemon and inject them into the dom */
-    let card = document.createElement("div"),
-        textContainer = document.createElement("div"),
-        cardSprite = document.createElement("img"),
-        cardName = document.createElement("h3"),
-        cardTypeList = document.createElement("ul"),
-        transpCover = document.createElement("div"),
-        contentWrapper = document.createElement("div"),
-        pokemonID = document.createElement("p");
-
-    // create the card div element
-    card.setAttribute("id", String(pokemon.id));
-    card.setAttribute("class", "pokemonCard");
-
-    // create the sprite image element
-    cardSprite.setAttribute("class", "cardSprite");
-    cardSprite.setAttribute("loading", "lazy");
-    cardSprite.src = pokemon.sprite;
-    
-    // create text container div element
-    textContainer.setAttribute("class", "textContainer");
-
-    // create the card name element
-    cardName.setAttribute("class", "cardName");
-    cardName.appendChild(document.createTextNode(capitalizeString(pokemon.name)));
-
-    // create the card type elements and add them to the type list
-    cardTypeList.setAttribute("class", "cardTypeList");
-    createTypeLi(cardTypeList, pokemon);
-
-    // create the id p element
-    pokemonID.appendChild(document.createTextNode(formatPokemonId(pokemon.id)));
-
-    // create the content wrapper
-    contentWrapper.setAttribute("class", "contentWrapper");
-
-    // create the transparent div cover
-    transpCover.setAttribute("class", "transpCardCover");
-
-    // add each of the elements to the card
-    contentWrapper.appendChild(cardSprite);
-    textContainer.appendChild(cardName);
-    textContainer.appendChild(cardTypeList);
-    textContainer.appendChild(pokemonID);
-    contentWrapper.appendChild(textContainer);
-    card.appendChild(contentWrapper);
-    card.appendChild(transpCover);
-
-    // add the card to the DOM
-    document.getElementById("pokemonGrid").appendChild(card);
-}
-
-function createTypeLi (typeList, pokemon) {
-    pokemon.type.forEach(t => {
-        let li = document.createElement("li");
-        li.setAttribute("class", "bg-color-" + t);
-        li.appendChild(document.createTextNode(t));
-        typeList.appendChild(li);
-    });
-}
-
-function formatPokemonId(id) {
-    if (id > 99) {
-        return "#" + String(id);
-    }
-    else {
-        return "#" + ("0" + ("0" + id).slice(-2)).slice(-3);
-    }
-}
+/* QUEUE AND DISPLAY RELATED FUNCTIONS */
 
 function filterQueue(input) {
     // here we dequeue any pokemon that no longer satisfy the searched properties
@@ -372,6 +344,70 @@ function displayCards() {
     });
 }
 
+function createPokemonCard(id) {
+    const pokemon = pokemonData[id - 1];
+
+    /* create the elements for each pokemon and inject them into the dom */
+    let card = document.createElement("div"),
+        textContainer = document.createElement("div"),
+        cardSprite = document.createElement("img"),
+        cardName = document.createElement("h3"),
+        cardTypeList = document.createElement("ul"),
+        transpCover = document.createElement("div"),
+        contentWrapper = document.createElement("div"),
+        pokemonID = document.createElement("p");
+
+    // create the card div element
+    card.setAttribute("id", String(pokemon.id));
+    card.setAttribute("class", "pokemonCard");
+
+    // create the sprite image element
+    cardSprite.setAttribute("class", "cardSprite");
+    cardSprite.setAttribute("loading", "lazy");
+    cardSprite.src = pokemon.sprite;
+    
+    // create text container div element
+    textContainer.setAttribute("class", "textContainer");
+
+    // create the card name element
+    cardName.setAttribute("class", "cardName");
+    cardName.appendChild(document.createTextNode(capitalizeString(pokemon.name)));
+
+    // create the card type elements and add them to the type list
+    cardTypeList.setAttribute("class", "cardTypeList");
+    createTypeLi(cardTypeList, pokemon);
+
+    // create the id p element
+    pokemonID.appendChild(document.createTextNode(formatPokemonId(pokemon.id)));
+
+    // create the content wrapper
+    contentWrapper.setAttribute("class", "contentWrapper");
+
+    // create the transparent div cover
+    transpCover.setAttribute("class", "transpCardCover");
+
+    // add each of the elements to the card
+    contentWrapper.appendChild(cardSprite);
+    textContainer.appendChild(cardName);
+    textContainer.appendChild(cardTypeList);
+    textContainer.appendChild(pokemonID);
+    contentWrapper.appendChild(textContainer);
+    card.appendChild(contentWrapper);
+    card.appendChild(transpCover);
+
+    // add the card to the DOM
+    document.getElementById("pokemonGrid").appendChild(card);
+}
+
+function createTypeLi (typeList, pokemon) {
+    pokemon.type.forEach(t => {
+        let li = document.createElement("li");
+        li.setAttribute("class", "bg-color-" + t);
+        li.appendChild(document.createTextNode(t));
+        typeList.appendChild(li);
+    });
+}
+
 /*function togglePokemonGen(n) {
     if (genToId["gen" + n][2]) {
         genToId["gen" + n][2] = false;
@@ -429,16 +465,9 @@ function displayCards() {
     console.log(pokemonIdList["queue"]);
 }*/
 
-function capitalizeString(string) {
-    /* capitalize a string */
-    return string[0].toUpperCase() + string.slice(1, string.length);
-}
-
 function setFocusedPicture(pokemon) {
-    const overlaySprite = document.getElementById("overlaySprite");
-
     // set the sprite link
-    overlaySprite.src = pokemon.offArt;
+    document.getElementById("overlaySprite").src = pokemon.offArt;
 
     // set the overlay title
     document.getElementById("overlayName").innerHTML = capitalizeString(pokemon.name) + " " + formatPokemonId(pokemon.id);
@@ -475,7 +504,7 @@ function setFocusedPicture(pokemon) {
             statName = newRow.insertCell(0), 
             moveVal = newRow.insertCell(1);
         
-        statName.appendChild(document.createTextNode(stat));
+        statName.appendChild(document.createTextNode(capitalizeString(stat)));
         moveVal.appendChild(document.createTextNode(pokemon.stats[stat]));
     });
 
@@ -488,4 +517,28 @@ function closeFocusedPicture() {
     document.getElementById("pokemonStats").innerHTML = "";
     document.getElementById("overlayTypeList").innerHTML = "";
     document.getElementById("abilities").children[1].innerHTML = "";
+}
+
+/* BASIC CONVERSION / DATA MANIPULATION FUNCTIONS */
+
+function capitalizeString(string) {
+    /* capitalize a string */
+    return string[0].toUpperCase() + string.slice(1, string.length);
+}
+
+function formatPokemonId(id) {
+    if (id > 99) {
+        return "#" + String(id);
+    }
+    else {
+        return "#" + ("0" + ("0" + id).slice(-2)).slice(-3);
+    }
+}
+
+function calculateTypeWeakness(pokemon) {
+    const types = pokemon.type;
+
+    let weakness = types.map(type => {
+
+    })
 }
