@@ -39,7 +39,7 @@ header {
     }
 }
 
-h1 {
+header h1 {
     color: #fff;
     font-family: "Ubuntu Mono", monospace;
     font-size: 4rem;
@@ -252,33 +252,50 @@ input:checked + .slider:before {
     z-index: 3;
     background-color: #FAFAFA;
     width: 65%;
+    max-width: 1000px;
 }
 
 #overlaySprite {
     height: auto;
     width: 100%;
     max-width: 400px;
+    background-color: #e9ecef;
+    border-radius: 8px;
 }
 
 .colWrapper {
     display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .overlayCol {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 50px 15px;
+    width: 100%;
+    max-width: 400px;
 }
 
 #pokemonDetails {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
     background-color: #FF4136;
+    padding: 5px 60px 0px 20px;
+    border-radius: 8px;
+    width: 100%;
 }
 
 .col {
     display: flex;
     flex-direction: column;
+}
+
+.col ul {
+    padding: 0px;
 }
 
 .col ul li {
@@ -291,11 +308,32 @@ input:checked + .slider:before {
 }
 
 .attributeTitle {
+    font-size: 1.3rem;
     color: #FFFFFF;
 }
 
 .attributeValue {
+    font-size: 1.2rem;
     color: #001f3f;
+    margin: 10px 0px;
+}
+
+#typeDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+@media only screen and (max-width: 950px) {
+    .colWrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /*#pokemonDetails {
+        padding: 5px 30px 0px 20px
+    }*/
 }
 
 /* MAIN BODY STYLING */
@@ -383,7 +421,7 @@ main {
 }
 
 .pokemonCard:hover {
-    transition: all 0.25s ease-out;
+    transition: all 0.2s ease-out;
     box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
     top: -4px;
     border: 1px solid #cccccc;

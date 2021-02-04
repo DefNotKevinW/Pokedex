@@ -441,7 +441,7 @@ function setFocusedPicture(pokemon) {
     overlaySprite.src = pokemon.offArt;
 
     // set the overlay title
-    document.getElementById("overlayName").innerHTML = pokemon.name + " " + formatPokemonId(pokemon.id);
+    document.getElementById("overlayName").innerHTML = capitalizeString(pokemon.name) + " " + formatPokemonId(pokemon.id);
 
     // set the details of the pokemon (ie. height, weight, abilities)
     document.getElementById("height").children[1].innerHTML = pokemon.height;
