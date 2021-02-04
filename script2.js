@@ -447,6 +447,7 @@ function setFocusedPicture(pokemon) {
     document.getElementById("height").children[1].innerHTML = pokemon.height;
     document.getElementById("weight").children[1].innerHTML = pokemon.weight;
 
+    // create ability list
     abilityList = document.getElementById("abilities").children[1];
     Object.keys(pokemon.abilities).forEach(ability => {
         let li = document.createElement("li");
@@ -468,11 +469,14 @@ function setFocusedPicture(pokemon) {
     createTypeLi(document.getElementById("overlayTypeList"), pokemon);
 
     // create the stat list
-    statList = document.getElementById("pokemonStats");
+    table = document.getElementById("pokemonStats");
     Object.keys(pokemon.stats).forEach(stat => {
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(stat + ": " + String(pokemon.stats[stat])));
-        statList.appendChild(li);
+        let newRow = table.insertRow(-1), 
+            statName = newRow.insertCell(0), 
+            moveVal = newRow.insertCell(1);
+        
+        statName.appendChild(document.createTextNode(stat));
+        moveVal.appendChild(document.createTextNode(pokemon.stats[stat]));
     });
 
     document.getElementById("overlayID").style.display = "block";

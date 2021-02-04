@@ -26,19 +26,6 @@ header {
     height: 400px;
 }
 
-@media only screen and (max-width: 1365px) {
-    header {
-        background-image: url("./resources/pokemon-background-image/491.svg");
-        background-position: center;
-    }
-}
-@media only screen and (max-width: 413px) {
-    header {
-        background-image: url("./resources/pokemon-background-image/494.svg");
-        background-position: center;
-    }
-}
-
 header h1 {
     color: #fff;
     font-family: "Ubuntu Mono", monospace;
@@ -53,6 +40,19 @@ header h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+@media only screen and (max-width: 1365px) {
+    header {
+        background-image: url("./resources/pokemon-background-image/491.svg");
+        background-position: center;
+    }
+}
+@media only screen and (max-width: 413px) {
+    header {
+        background-image: url("./resources/pokemon-background-image/494.svg");
+        background-position: center;
+    }
 }
 
 /* SEACH BAR STYLING */
@@ -253,14 +253,15 @@ input:checked + .slider:before {
     background-color: #FAFAFA;
     width: 65%;
     max-width: 1000px;
+    border-radius: 5px;
 }
 
-#overlaySprite {
-    height: auto;
-    width: 100%;
-    max-width: 400px;
-    background-color: #e9ecef;
-    border-radius: 8px;
+#bigPicWrapper h1 {
+    font-size: 2.7rem;
+}
+
+#bigPicWrapper h2 {
+    font-size: 2rem;
 }
 
 .colWrapper {
@@ -276,6 +277,18 @@ input:checked + .slider:before {
     margin: 50px 15px;
     width: 100%;
     max-width: 400px;
+}
+
+#overlaySprite {
+    height: auto;
+    width: 100%;
+    max-width: 400px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+}
+
+#pokemonStats {
+    
 }
 
 #pokemonDetails {
@@ -325,7 +338,19 @@ input:checked + .slider:before {
     width: 100%;
 }
 
+#overlayTypeList li {
+    margin: 0px 5px 10px 5px;
+    padding: 6px 10px;
+    width: 128px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
 @media only screen and (max-width: 950px) {
+    #bigPicWrapper {
+        width: 95%;
+    }
+
     .colWrapper {
         flex-direction: column;
         align-items: center;
