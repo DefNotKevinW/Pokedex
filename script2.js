@@ -26,7 +26,7 @@ features to add:
 - pokemon forms 
 - evolution chain
 */
-const generationToID = {
+const pokemonIdList = {
     "gen1": [0, 150],
     "gen2": [151, 250],
     "gen3": [251, 385],
@@ -34,19 +34,25 @@ const generationToID = {
     "gen5": [493, 648],
     "gen6": [649, 721],
     "gen7": [721, 808],
-    "gen8": [809, 897]
+    "gen8": [809, 897],
+    "queue": [],    // whatever will appear on the DOM is in queue
+    "displayed": [] // whatever is on the DOM is in displayed
 };
 
-const promises = [];
+let promises = {
+    1: [],
+    2: []
+};
+
 let pokemonData;
 
 document.getElementById("loading ring").classList.add("lds-ring");
 
-for (let i = 1; i < 899; i++) {
-    promises.push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
+for (let i = 1; i < 152; i++) {
+    promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
 }
 
-Promise.all(promises)
+Promise.all(promises[1])
     .then(responses => {
         return Promise.all(responses.map(response => {
             return response.json();
@@ -68,22 +74,25 @@ Promise.all(promises)
         })
         document.getElementById("loading ring").classList.remove("lds-ring");
 
-        addCards(pokemonData, "gen1");
+        loadRestOfData();
+
+        resetAllPokemon();
+
+        // addCards(pokemonData, "gen1");
 
         document.getElementById("searchBar").addEventListener("keyup", (e) => {
             const pokeCardList = document.getElementsByClassName("pokemonCard"),
                 input = e.target.value.toLowerCase();
             if (input === "") {
-                for (let i = 0; i < pokeCardList.length; i++) {
-                    pokeCardList[i].style.display = "grid";
-                }
+                resetAllPokemon();
             }
             else {
                 if (false /*toggleSearchType()*/) { // this feature isn't completed yet
                     searchForCardType(pokeCardList, input);
                 }
                 else {
-                    searchForCardName(pokeCardList, input);
+                    filterQueue(input);
+                    filterDisplayed(input);
                 }
                 
             }
@@ -105,6 +114,39 @@ Promise.all(promises)
     .catch(err => {
         console.log(err);
     });
+
+function loadRestOfData() {
+    console.log("hello!");
+    for (let i = 152; i < 899; i++) {
+        promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
+    }
+
+    Promise.all(promises[2])
+        .then(responses => {
+            return Promise.all(responses.map(response => {
+                return response.json();
+            }))
+        })
+        .then(results => {
+            let pokemonData2 = results.map(pokemon => {
+                return {
+                    name: pokemon.name,
+                    id: pokemon.id,
+                    type: getType(pokemon),
+                    sprite: pokemon.sprites.front_default,
+                    offArt: pokemon.sprites.other["official-artwork"].front_default,
+                    stats: getStats(pokemon),
+                    abilities: getAbilities(pokemon),
+                    height: (0.1 * pokemon.height).toFixed(2) + " m",
+                    weight: (0.1 * pokemon.weight).toFixed(2) + " kg"
+                };
+            });
+            pokemonData = pokemonData.concat(pokemonData2);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
 
 function getType(pokemon) {
     /* get the type(s) of the pokemon */
@@ -133,7 +175,9 @@ function getAbilities(pokemon) {
     return abilityObj;
 }
 
-function createPokemonCard(pokemon) {
+function createPokemonCard(id) {
+    const pokemon = pokemonData[id - 1];
+
     /* create the elements for each pokemon and inject them into the dom */
     let card = document.createElement("div"),
         textContainer = document.createElement("div"),
@@ -204,99 +248,140 @@ function formatPokemonId(id) {
     }
 }
 
-function addCards(pokemonList, gen) {
-    /* create a card for each pokemon */
-    for (let i = generationToID[gen][0]; i <= generationToID[gen][1]; i++) {
+function filterQueue(input) {
+    let queue = pokemonIdList["queue"];
+    // here we dequeue any pokemon that no longer satisfy the searched properties
+    for (let i = queue.length - 1; i >= 0; i--) {
+        // if pokemon name does not contain input, remove it from the queue
+        if (!pokemonData[queue[i] - 1].name.toLowerCase().includes(input)) {
+            dequeuePokemon(i);
+        }
+    }
+
+    // here we queue up any pokemon that now satisfy the properties
+    // note that pokemon that are displayed should not be queued up
+    for (let i = 0; i < pokemonData.length; i++) {
+        const pokemon = pokemonData[i]
+        if (!pokemonIdList["displayed"].includes(pokemon.id) && pokemon.name.toLowerCase().includes(input)) {
+            queuePokemon(pokemon.id);
+        }
+    }
+}
+
+function queuePokemon(id) {
+    if (!pokemonIdList["queue"].includes(id)) {
+        pokemonIdList["queue"].push(id);
+    }
+
+    pokemonIdList["queue"].sort((a, b) => a - b);
+}
+
+function dequeuePokemon(index = 0) {
+    pokemonIdList["queue"].splice(index, 1);
+    pokemonIdList["queue"].sort((a, b) => a - b);
+}
+
+function filterDisplayed(input) {
+    let displayed = pokemonIdList["displayed"];
+    // here we undisplay any pokemon that no longer satisfy the searched properties
+    for (let i = displayed.length - 1; i >= 0; i--) {
+        // if pokemon name does not contain input, remove it from the display
+        if (!pokemonData[displayed[i] - 1].name.toLowerCase().includes(input)) {
+            removePokemon(i);
+            // additionally, if the queue isn't empty, we can replace the removed pokemon with a new one.
+            if (pokemonIdList["queue"].length > 0) {
+                addPokemon();
+            }
+        }
+    }
+
+    // now we display new pokemon
+    while (displayed.length < 40 && pokemonIdList["queue"].length > 0) {
+        addPokemon();
+    }
+}
+
+function removePokemon(index) {
+    let displayed = pokemonIdList["displayed"];
+
+    // remove from dom
+    document.getElementById(String(displayed[index])).remove();
+
+    // remove from displayed list
+    displayed.splice(index, 1);
+}
+
+function addPokemon() {
+    let displayed = pokemonIdList["displayed"];
+    // add to displayed
+    displayed.push(pokemonIdList["queue"][0]);
+    dequeuePokemon();
+
+    // when we add a pokemon, we want everything to maintain its correct order (ascending by pokemon id)
+    // so we will sort the displayed
+    resetCards();
+    displayed.sort((a, b) => a - b);
+
+    // add all cards to dom
+    displayed.forEach(id => {
+        createPokemonCard(id);
+    })
+    
+}
+
+function resetAllPokemon() {
+    resetCards();
+
+    pokemonIdList["queue"] = [];
+    pokemonIdList["displayed"] = [];
+
+    // first add cards to queue
+    for (let id = 1; id < 152; id++) {
+        queuePokemon(id);
+    }
+
+    for (let i = 0; i < 40; i++) {
+        addPokemon();
+    }
+}
+
+function resetCards() {
+    document.getElementById("pokemonGrid").innerHTML = "";
+}
+
+/*function addCards(pokemonList, gen) {
+    /* create a card for each pokemon /
+    for (let i = pokemonIdList[gen][0]; i <= pokemonIdList[gen][1]; i++) {
         createPokemonCard(pokemonList[i]);
     }
 }
 
 function removeCards(gen) {
-    for (let i = generationToID[gen][0]; i <= generationToID[gen][1]; i++) {
+    for (let i = pokemonIdList[gen][0]; i <= pokemonIdList[gen][1]; i++) {
         document.getElementById(String(i + 1)).remove();
     }
 }
 
-function togglePokemonFromGen(gen) {
-    switch (gen) {
-        case 'gen1':
-            if (document.getElementById("gen1Tog").checked) {
-                addCards(pokemonData, gen);
+function togglePokemonFromGen(g) {
+    if (document.getElementById("gen" + g + "Tog").checked) {
+        pokemonData.forEach(pokemon => {
+            if (pokemon.id <= pokemonIdList["gen" + g][1] && pokemon.id > pokemonIdList["gen" + g][0]) {
+                queuePokemon(pokemon);
             }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen2':
-            if (document.getElementById("gen2Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen3':
-            if (document.getElementById("gen3Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen4':
-            if (document.getElementById("gen4Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen5':
-            if (document.getElementById("gen5Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen6':
-            if (document.getElementById("gen6Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen7':
-            if (document.getElementById("gen7Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
-        case 'gen8':
-            if (document.getElementById("gen8Tog").checked) {
-                addCards(pokemonData, gen);
-            }
-            else {
-                removeCards(gen);
-            }
-            break;
+        });
     }
-}
+}*/
 
 function capitalizeString(string) {
     /* capitalize a string */
     return string[0].toUpperCase() + string.slice(1, string.length);
 }
 
-function searchForCardName(cardList, input) {
-    /* search for pokemon by name */
+/*function searchForCardName(cardList, input) {
+    /* search for pokemon by name /
     for (let i = 0; i < cardList.length; i++) {
         let cardName = cardList[i].children[0].children[1].children[0].innerHTML;
         
-
         if (cardName.toLowerCase().includes(input)) {
             cardList[i].style.display = "grid";
         }
@@ -304,7 +389,7 @@ function searchForCardName(cardList, input) {
             cardList[i].style.display = "none";
         }
     }
-}
+}*/
 
 function searchForCardType(cardList, input) {
     /* search for pokemon by type */
@@ -377,6 +462,7 @@ function setFocusedPicture(pokemon) {
 
 function closeFocusedPicture() {
     document.getElementById("overlayID").style.display = "none";
+    overlaySprite.src = "";
     document.getElementById("pokemonStats").innerHTML = "";
     document.getElementById("overlayTypeList").innerHTML = "";
     document.getElementById("abilities").children[1].innerHTML = "";
