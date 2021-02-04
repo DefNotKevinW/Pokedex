@@ -157,7 +157,8 @@ input:checked + .slider:before {
 
 /* GENERATION FILTER LIST STYLING */
 
-.getContainer {
+.genContainer {
+    display: none; /*CURRENTLY INVISIBLE UnTIL USABLE*/
     max-width: 640px;
     font-size: 13px;
 }
