@@ -51,7 +51,7 @@ let pokemonData;
 
 document.getElementById("loading ring").classList.add("lds-ring");
 
-for (let i = 1; i < 152; i++) {
+for (let i = 1; i < 49; i++) {
     promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
 }
 
@@ -75,7 +75,6 @@ Promise.all(promises[1])
                 weight: (0.1 * pokemon.weight).toFixed(2) + " kg"
             };
         })
-        document.getElementById("loading ring").classList.remove("lds-ring");
 
         loadRestOfData();
 
@@ -129,7 +128,7 @@ Promise.all(promises[1])
 
 function loadRestOfData() {
     console.log("hello!");
-    for (let i = 152; i < 899; i++) {
+    for (let i = 49; i < 899; i++) {
         promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
     }
 
@@ -155,7 +154,10 @@ function loadRestOfData() {
             });
             pokemonData = pokemonData.concat(pokemonData2);
 
+            document.getElementById("loading ring").classList.remove("lds-ring");
+
             filterQueue(document.getElementById("searchBar").value.toLowerCase());
+            filterDisplayed(document.getElementById("searchBar").value.toLowerCase());
         })
         .catch(err => {
             console.log(err);
@@ -307,8 +309,10 @@ function filterDisplayed(input) {
     }
 
     // now we display new pokemon
-    while (pokemonIdList["displayed"].length < 24 && pokemonIdList["queue"].length > 0) {
-        addPokemon();
+    if (pokemonIdList["displayed"].length < 24) {
+        while (pokemonIdList["displayed"].length < 24 && pokemonIdList["queue"].length > 0) {
+            addPokemon();
+        }
     }
 
     displayCards();
