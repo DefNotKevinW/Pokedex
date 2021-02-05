@@ -242,26 +242,12 @@ function createEvolutionTree(chain, parent) {
 }
 
 function createEvolPokemon(chain, parent) {
-    const splitted = chain.species.url.split("/"),
-        id = parseInt(splitted[splitted.length - 2]);
-    let li = document.createElement("li"),
-        wrapper = document.createElement("div"),
-        childContainer = document.createElement("ul"),
-        img = document.createElement("img"),
-        name = document.createElement("p");
 
-    img.src = pokemonData[id - 1].sprite;
-
-    name.appendChild(document.createTextNode(chain.species.name));
+    let childContainer = document.createElement("ul");
 
     childContainer.setAttribute("class", "tree");
-
-    wrapper.appendChild(img);
-    wrapper.appendChild(name);
-    li.appendChild(wrapper);
-    li.appendChild(childContainer);
-
-    parent.appendChild(li);
+    
+    createEvolLeaf(chain, parent).appendChild(childContainer);
 
     return childContainer;
 }
@@ -274,6 +260,8 @@ function createEvolLeaf(chain, parent) {
         img = document.createElement("img"),
         name = document.createElement("p");
 
+    wrapper.setAttribute("class", "evolWrapper");
+
     img.src = pokemonData[id - 1].sprite;
 
     name.appendChild(document.createTextNode(chain.species.name));
@@ -283,6 +271,8 @@ function createEvolLeaf(chain, parent) {
     li.appendChild(wrapper);
 
     parent.appendChild(li);
+
+    return li
 }
 
 function getType(pokemon) {
@@ -658,4 +648,8 @@ function calculateTypeWeakness(pokemon) {
     }
 
     return weaknesses;
+}
+
+function formatPokemonName(name, id) {
+
 }

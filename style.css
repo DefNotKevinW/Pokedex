@@ -245,13 +245,13 @@ button:hover {
 }
 
 #statsCard {
-    background-color: #FF851B;
+    background-color: #FC644D;
     color: #001f3f;
     font-size: 1.2rem;
 }
 
 #statsCard h2 {
-    color: #111111;
+    color: #FFFFFF;
 }
 
 #pokemonStats {
@@ -298,7 +298,7 @@ button:hover {
 }
 
 #typeDetails {
-    background-color: #212121;
+    background-color: #424242;
 }
 
 #typeDetails h2 {
@@ -322,14 +322,22 @@ button:hover {
 /* overlay evolution chain */
 
 #evolutions {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    background-color: #0074D9;
+    max-width: 500px;
+}
+
+#evolutions h2 {
+    color: #FFFFFF;
+}
+
+.evolWrapper {
+    background-color: #424242;
+    color: #FFFFFF;
+    border-radius: 30px;
 }
 
 .treeParent {
-    padding-right: 2vw;
+    padding-right: 20px;
 }
 
 .tree li, .treeParent li {
@@ -337,7 +345,7 @@ button:hover {
     flex-direction: row;
     align-items: center;
     position: relative;
-    padding-left: 2vw;
+    padding-left: 20px;
 }
 
 .tree div, .treeParent div {
@@ -346,7 +354,7 @@ button:hover {
 }
 
 .tree ul, .treeParent ul {
-    padding-left: 2vw;
+    padding-left: 20px;
     position: relative;
 }
 
@@ -356,8 +364,8 @@ button:hover {
     left: 0px;
     top: 50%;
     display: block;
-    border-right: 5px solid #111111;
-    border-bottom: 5px solid #111111;
+    border-right: 5px solid #FFFFFF;
+    border-bottom: 5px solid #FFFFFF;
     width: 12px;
     height: 12px;
     transform: translate(-50%, -50%) rotate(-45deg);
