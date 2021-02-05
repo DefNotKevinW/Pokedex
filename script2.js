@@ -39,26 +39,25 @@ let genToId = {
 
 let typeRelations = {
     typeOrder: {
-        "normal": 0,
-		"fire": 1,
-		"water": 2,
-		"electric": 3,
-		"grass": 4,
-		"ice": 5,
-		"fighting": 6,
-		"poison": 7,
-		"ground": 8,
-		"flying": 9,
-		"psychic": 10,
-		"bug": 11,
-		"rock": 12,
-		"ghost": 13,
-		"dragon": 14,
-		"dark": 15,
-        "steel": 16,
-        "fairy": 17
+        0: "normal",
+		1: "fire",
+		2: "water",
+		3: "electric",
+		4: "grass",
+		5: "ice",
+		6: "fighting",
+		7: "poison",
+		8: "ground",
+		9: "flying",
+		10:"psychic",
+		11: "bug",
+		12: "rock",
+		13: "ghost",
+		14: "dragon",
+		15: "dark",
+        16: "steel",
+        17: "fairy"
     },
-
     typeChart: {
         "normal": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
 		"fire": [1, 0.5, 2, 1, 0.5, 0.5, 1, 1, 2, 1, 1, 0.5, 2, 1, 1, 1, 0.5, 0.5],
@@ -477,7 +476,31 @@ function setFocusedPicture(pokemon) {
     document.getElementById("weight").children[1].innerHTML = pokemon.weight;
 
     // create ability list
-    abilityList = document.getElementById("abilities").children[1];
+    createAbilityList(pokemon);
+
+    // create the type list
+    createTypeLi(document.getElementById("overlayTypeList"), pokemon);
+
+    // create the stat list
+    createStatList(pokemon);
+
+    // create the weaknesses list
+    createWeaknessList(pokemon);
+
+    document.getElementById("overlayID").style.display = "block";
+}
+
+function closeFocusedPicture() {
+    document.getElementById("overlayID").style.display = "none";
+    overlaySprite.src = "";
+    document.getElementById("pokemonStats").innerHTML = "";
+    document.getElementById("overlayTypeList").innerHTML = "";
+    document.getElementById("overlayTypeDisadv").innerHTML = "";
+    document.getElementById("abilities").children[1].innerHTML = "";
+}
+
+function createAbilityList(pokemon) {
+    let abilityList = document.getElementById("abilities").children[1];
     Object.keys(pokemon.abilities).forEach(ability => {
         let li = document.createElement("li");
         let span = document.createElement("span");
@@ -493,11 +516,9 @@ function setFocusedPicture(pokemon) {
         }
         abilityList.appendChild(li);
     });
+}
 
-    // create the type list
-    createTypeLi(document.getElementById("overlayTypeList"), pokemon);
-
-    // create the stat list
+function createStatList(pokemon) {
     table = document.getElementById("pokemonStats");
     Object.keys(pokemon.stats).forEach(stat => {
         let newRow = table.insertRow(-1), 
@@ -507,16 +528,16 @@ function setFocusedPicture(pokemon) {
         statName.appendChild(document.createTextNode(capitalizeString(stat)));
         moveVal.appendChild(document.createTextNode(pokemon.stats[stat]));
     });
-
-    document.getElementById("overlayID").style.display = "block";
 }
 
-function closeFocusedPicture() {
-    document.getElementById("overlayID").style.display = "none";
-    overlaySprite.src = "";
-    document.getElementById("pokemonStats").innerHTML = "";
-    document.getElementById("overlayTypeList").innerHTML = "";
-    document.getElementById("abilities").children[1].innerHTML = "";
+function createWeaknessList(pokemon) {
+    const weaknesses = calculateTypeWeakness(pokemon);
+    Object.keys(weaknesses).forEach(type => {
+        let li = document.createElement("li");
+        li.setAttribute("class", "bg-color-" + type);
+        li.appendChild(document.createTextNode(String(weaknesses[type]) + "x " + type));
+        document.getElementById("overlayTypeDisadv").appendChild(li);
+    });
 }
 
 /* BASIC CONVERSION / DATA MANIPULATION FUNCTIONS */
@@ -537,8 +558,19 @@ function formatPokemonId(id) {
 
 function calculateTypeWeakness(pokemon) {
     const types = pokemon.type;
+    let vals = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    let weaknesses = {};
+    types.forEach(type => {
+        for (let i = 0; i < 18; i++) {
+            vals[i] = vals[i] * typeRelations["typeChart"][type][i];
+        }
+    });
 
-    let weakness = types.map(type => {
+    for (let i = 0; i < vals.length; i++) {
+        if (vals[i] > 1) {
+            weaknesses[typeRelations["typeOrder"][i]] = vals[i];
+        }
+    }
 
-    })
+    return weaknesses;
 }

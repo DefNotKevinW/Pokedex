@@ -178,7 +178,7 @@ input[type="search"]::-webkit-search-results-decoration {
     padding: 10px 10px;
     position: relative;
     z-index: 3;
-    background-color: #FAFAFA;
+    background-color: #FFFFFF;
     width: 65%;
     max-width: 1000px;
     border-radius: 8px;
@@ -313,15 +313,25 @@ button:hover {
 }
 
 #typeDetails {
-    background-color: #AAAAAA;
+    background-color: #212121;
+}
+
+#typeDetails h2 {
+    color: #FFFFFF;
 }
 
 #overlayTypeList li {
     margin: 0px 5px 10px 5px;
-    padding: 6px 10px;
-    width: 128px;
-    border-radius: 5px;
-    font-size: 1.2rem;
+    padding: 6px 0px;
+    width: 110px;
+    font-size: 1.1rem;
+}
+
+#overlayTypeDisadv li {
+    margin: 0px 5px 10px 5px;
+    padding: 6px 0px;
+    width: 110px;
+    font-size: 1.1rem;
 }
 
 @media only screen and (max-width: 1300px) {
@@ -476,6 +486,7 @@ main {
 .cardTypeList {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 0;
     padding: 0;
 }
