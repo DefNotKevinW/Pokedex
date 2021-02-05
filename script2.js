@@ -231,7 +231,7 @@ function getEvolChain(pokemon) {
 function createEvolutionTree(chain, parent) {
     /* recursively creates the evolution chain */
     if (chain.evolves_to.length === 0) {
-        createEvolPokemon(chain, parent);
+        createEvolLeaf(chain, parent);
     }
     else {
         let newParent = createEvolPokemon(chain, parent);
@@ -244,8 +244,8 @@ function createEvolutionTree(chain, parent) {
 function createEvolPokemon(chain, parent) {
     const splitted = chain.species.url.split("/"),
         id = parseInt(splitted[splitted.length - 2]);
-    let li1 = document.createElement("li"),
-        li2 = document.createElement("li"),
+    let li = document.createElement("li"),
+        wrapper = document.createElement("div"),
         childContainer = document.createElement("ul"),
         img = document.createElement("img"),
         name = document.createElement("p");
@@ -254,14 +254,35 @@ function createEvolPokemon(chain, parent) {
 
     name.appendChild(document.createTextNode(chain.species.name));
 
-    li1.appendChild(img);
-    li1.appendChild(name);
-    li2.appendChild(childContainer);
+    childContainer.setAttribute("class", "tree");
 
-    parent.appendChild(li1);
-    parent.appendChild(li2)
+    wrapper.appendChild(img);
+    wrapper.appendChild(name);
+    li.appendChild(wrapper);
+    li.appendChild(childContainer);
+
+    parent.appendChild(li);
 
     return childContainer;
+}
+
+function createEvolLeaf(chain, parent) {
+    const splitted = chain.species.url.split("/"),
+        id = parseInt(splitted[splitted.length - 2]);
+    let li = document.createElement("li"),
+        wrapper = document.createElement("div"),
+        img = document.createElement("img"),
+        name = document.createElement("p");
+
+    img.src = pokemonData[id - 1].sprite;
+
+    name.appendChild(document.createTextNode(chain.species.name));
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(name);
+    li.appendChild(wrapper);
+
+    parent.appendChild(li);
 }
 
 function getType(pokemon) {

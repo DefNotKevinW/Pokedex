@@ -6,11 +6,10 @@ body {
     margin: 0;
 }
 
-ul {
+ul,li {
     list-style: none;
-}
-li {
-    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 header {
@@ -155,7 +154,7 @@ input[type="search"]::-webkit-search-results-decoration {
     opacity: 0;
 }
 
-/* OVERLAY STYLING */
+/* ===OVERLAY STYLING=== */
 
 #overlayID {
     display: none;
@@ -194,15 +193,7 @@ input[type="search"]::-webkit-search-results-decoration {
     margin-bottom: 20px;
 }
 
-/*#bigPicWrapper button {
-    position: absolute;
-    cursor: pointer;
-    background: none;
-    outline: none;
-    border: 0;
-    top: 0;
-    right: 0;
-}*/
+/* close button */
 
 button {
     border: 0;
@@ -227,16 +218,6 @@ button:hover {
     background-color: #FF4136;
 }
 
-.detailsCard {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    padding: 5px 20px 10px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
 .colWrapper {
     display: flex;
     justify-content: center;
@@ -251,6 +232,8 @@ button:hover {
     width: 100%;
     max-width: 400px;
 }
+
+/* overlay details */
 
 #overlaySprite {
     height: auto;
@@ -275,12 +258,22 @@ button:hover {
     width: 100%;
 }
 
+.detailsCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 5px 20px 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
 #pokemonDetails {
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
     background-color: #3D9970;
-    padding: 5px 60px 0px 20px;
+    padding: 20px 60px 10px 20px;
 }
 
 .col {
@@ -288,17 +281,9 @@ button:hover {
     flex-direction: column;
 }
 
-.col ul {
-    padding: 0px;
-}
-
 .col ul li {
     display: flex;
     flex-direction: column;
-}
-
-.attributeList {
-    padding: 0;
 }
 
 .attributeTitle {
@@ -334,6 +319,51 @@ button:hover {
     font-size: 1.1rem;
 }
 
+/* overlay evolution chain */
+
+#evolutions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.treeParent {
+    padding-right: 2vw;
+}
+
+.tree li, .treeParent li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    padding-left: 2vw;
+}
+
+.tree div, .treeParent div {
+    border: 1px solid;
+    text-align: center;
+}
+
+.tree ul, .treeParent ul {
+    padding-left: 2vw;
+    position: relative;
+}
+
+.tree li::before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    display: block;
+    border-right: 5px solid #111111;
+    border-bottom: 5px solid #111111;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+
 @media only screen and (max-width: 1300px) {
     #bigPicWrapper {
         width: 80%;
@@ -366,7 +396,7 @@ button:hover {
     }
 }
 
-/* MAIN BODY STYLING */
+/* ===MAIN BODY STYLING=== */
 
 body {
     background-color: #424242;
@@ -487,8 +517,6 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
 }
 
 .cardTypeList li {
