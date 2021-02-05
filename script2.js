@@ -92,7 +92,7 @@ let promises = {
 
 let pokemonData;
 
-document.getElementById("loading ring").classList.add("lds-ring");
+document.getElementById("loadingRing1").classList.add("lds-ring");
 
 for (let i = 1; i < 49; i++) {
     promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
@@ -195,7 +195,7 @@ function loadRestOfData() {
             });
             pokemonData = pokemonData.concat(pokemonData2);
 
-            document.getElementById("loading ring").classList.remove("lds-ring");
+            document.getElementById("loadingRing1").classList.remove("lds-ring");
 
             filterQueue(document.getElementById("searchBar").value.toLowerCase());
             filterDisplayed(document.getElementById("searchBar").value.toLowerCase());
@@ -203,6 +203,65 @@ function loadRestOfData() {
         .catch(err => {
             console.log(err);
         });
+}
+
+function getEvolChain(pokemon) {
+    fetch("https://pokeapi.co/api/v2/pokemon-species/" + pokemon.id + "/")
+        .then(response => {
+            return response.json();
+        })
+        .then(species => {
+            fetch(species.evolution_chain.url)
+                .then(response => {
+                    return response.json();
+                })
+                .then(evolChain => {
+                    createEvolutionTree(evolChain.chain, document.getElementById("evolChain"));
+                    document.getElementById("loadingRing2").classList.remove("lds-ring");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+function createEvolutionTree(chain, parent) {
+    /* recursively creates the evolution chain */
+    if (chain.evolves_to.length === 0) {
+        createEvolPokemon(chain, parent);
+    }
+    else {
+        let newParent = createEvolPokemon(chain, parent);
+        for (let i = 0; i < chain.evolves_to.length; i++) {
+            createEvolutionTree(chain.evolves_to[i], newParent);
+        }
+    }
+}
+
+function createEvolPokemon(chain, parent) {
+    const splitted = chain.species.url.split("/"),
+        id = parseInt(splitted[splitted.length - 2]);
+    let li1 = document.createElement("li"),
+        li2 = document.createElement("li"),
+        childContainer = document.createElement("ul"),
+        img = document.createElement("img"),
+        name = document.createElement("p");
+
+    img.src = pokemonData[id - 1].sprite;
+
+    name.appendChild(document.createTextNode(chain.species.name));
+
+    li1.appendChild(img);
+    li1.appendChild(name);
+    li2.appendChild(childContainer);
+
+    parent.appendChild(li1);
+    parent.appendChild(li2)
+
+    return childContainer;
 }
 
 function getType(pokemon) {
@@ -402,7 +461,7 @@ function createTypeLi (typeList, pokemon) {
     pokemon.type.forEach(t => {
         let li = document.createElement("li");
         li.setAttribute("class", "bg-color-" + t);
-        li.appendChild(document.createTextNode(t));
+        li.appendChild(document.createTextNode(capitalizeString(t)));
         typeList.appendChild(li);
     });
 }
@@ -465,8 +524,12 @@ function createTypeLi (typeList, pokemon) {
 }*/
 
 function setFocusedPicture(pokemon) {
+    document.getElementById("loadingRing2").classList.add("lds-ring");
     // set the sprite link
     document.getElementById("overlaySprite").src = pokemon.offArt;
+
+    // create the evolution chain
+    getEvolChain(pokemon);
 
     // set the overlay title
     document.getElementById("overlayName").innerHTML = capitalizeString(pokemon.name) + " " + formatPokemonId(pokemon.id);
@@ -497,6 +560,7 @@ function closeFocusedPicture() {
     document.getElementById("overlayTypeList").innerHTML = "";
     document.getElementById("overlayTypeDisadv").innerHTML = "";
     document.getElementById("abilities").children[1].innerHTML = "";
+    document.getElementById("evolChain").innerHTML = "";
 }
 
 function createAbilityList(pokemon) {
@@ -505,12 +569,12 @@ function createAbilityList(pokemon) {
         let li = document.createElement("li");
         let span = document.createElement("span");
         if (!pokemon.abilities[ability]) {
-            span.appendChild(document.createTextNode(ability));
+            span.appendChild(document.createTextNode(capitalizeString(ability)));
             span.setAttribute("class", "attributeValue");
             li.appendChild(span);
         }
         else {
-            span.appendChild(document.createTextNode("(" + ability + ")"));
+            span.appendChild(document.createTextNode("(" + capitalizeString(ability) + ")"));
             span.setAttribute("class", "attributeValue");
             li.appendChild(span);
         }
@@ -535,7 +599,7 @@ function createWeaknessList(pokemon) {
     Object.keys(weaknesses).forEach(type => {
         let li = document.createElement("li");
         li.setAttribute("class", "bg-color-" + type);
-        li.appendChild(document.createTextNode(String(weaknesses[type]) + "x " + type));
+        li.appendChild(document.createTextNode(String(weaknesses[type]) + "x " + capitalizeString(type)));
         document.getElementById("overlayTypeDisadv").appendChild(li);
     });
 }
