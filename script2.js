@@ -692,7 +692,7 @@ function createWeaknessList(pokemon) {
 }
 
 function createBulbLink(pokemon) {
-    return "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.name;
+    return "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.name + "_(Pok%C3%A9mon)";
 }
 
 /* BASIC CONVERSION / DATA MANIPULATION FUNCTIONS */
