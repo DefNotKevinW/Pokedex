@@ -213,7 +213,7 @@ button {
     right: 10px;
     font-size: 2rem;
     background: none;
-    color: #111111;
+    color: #FFFFFF;
     padding: 0px 10px 4px 10px;
     -webkit-transition: background-color 0.2s ease-out;
     -moz-transition: background-color 0.2s ease-out;
@@ -222,7 +222,6 @@ button {
 }
 
 button:hover {
-    color: #ffffff;
     background-color: #FF4136;
 }
 
