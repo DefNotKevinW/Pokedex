@@ -205,7 +205,7 @@ function loadRestOfData() {
         });
 }
 
-function getEvolChain(pokemon) {
+function fetchSpeciesInfo(pokemon) {
     fetch("https://pokeapi.co/api/v2/pokemon-species/" + pokemon.id + "/")
         .then(response => {
             return response.json();
@@ -221,11 +221,20 @@ function getEvolChain(pokemon) {
                 })
                 .catch(err => {
                     console.log(err);
-                })
+                });
+            
+            if (species.varieties.length > 1) {
+                getVarieties(species);
+            }
+            else {
+                document.getElementById("altForms").appendChild(
+                    document.createTextNode("This Pokemon has no alternate forms."));
+            }
+            document.getElementById("loadingRing3").classList.remove("lds-ring");
         })
         .catch(err => {
             console.log(err);
-        })
+        });
 }
 
 function createEvolutionTree(chain, parent) {
@@ -273,6 +282,52 @@ function createEvolLeaf(chain, parent) {
     parent.appendChild(li);
 
     return li
+}
+
+function getVarieties(species) {
+    let proms = [];
+    for (let i = 0; i < species.varieties.length; i++) {
+        proms.push(fetch(species.varieties[i].pokemon.url));
+    }
+
+    Promise.all(proms)
+        .then(responses => {
+            return Promise.all(responses.map(response => {
+                return response.json();
+            }))
+        })
+        .then(results => {
+            let forms = results.map(pokemon => {
+                return {
+                    name: pokemon.name,
+                    type: getType(pokemon),
+                    sprite: pokemon.sprites.front_default,
+                    offArt: pokemon.sprites.other["official-artwork"].front_default,
+                    stats: getStats(pokemon),
+                    abilities: getAbilities(pokemon),
+                    height: (0.1 * pokemon.height).toFixed(2) + " m",
+                    weight: (0.1 * pokemon.weight).toFixed(2) + " kg"
+                };
+            });
+
+            forms.slice(1, forms.length).forEach(pokemon => {createAltForm(pokemon)});
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+function createAltForm(pokemon) {
+    let wrapper = document.createElement("div"),
+        img = document.createElement("img"),
+        name = document.createElement("p");
+    wrapper.setAttribute("class", "altFormCard")
+    img.src = pokemon.sprite;
+    name.appendChild(document.createTextNode(capitalizeString(pokemon.name)));
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(name);
+    document.getElementById("altForms").appendChild(wrapper);
 }
 
 function getType(pokemon) {
@@ -536,11 +591,12 @@ function createTypeLi (typeList, pokemon) {
 
 function setFocusedPicture(pokemon) {
     document.getElementById("loadingRing2").classList.add("lds-ring");
+    document.getElementById("loadingRing3").classList.add("lds-ring");
     // set the sprite link
     document.getElementById("overlaySprite").src = pokemon.offArt;
 
     // create the evolution chain
-    getEvolChain(pokemon);
+    fetchSpeciesInfo(pokemon);
 
     // set the overlay title
     document.getElementById("overlayName").innerHTML = capitalizeString(pokemon.name) + " " + formatPokemonId(pokemon.id);
@@ -572,6 +628,7 @@ function closeFocusedPicture() {
     document.getElementById("overlayTypeDisadv").innerHTML = "";
     document.getElementById("abilities").children[1].innerHTML = "";
     document.getElementById("evolChain").innerHTML = "";
+    document.getElementById("altForms").innerHTML = "";
 }
 
 function createAbilityList(pokemon) {

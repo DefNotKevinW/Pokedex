@@ -183,6 +183,15 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 8px;
 }
 
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #424242;
+    border-radius: 8px;
+    color: #FFFFFF;
+}
+
 #bigPicWrapper h1 {
     font-size: 2.7rem;
 }
@@ -200,11 +209,10 @@ button {
     cursor: pointer;
     outline: none;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
     font-size: 2rem;
     background: none;
-    background-color: #AAAAAA;
     color: #111111;
     padding: 0px 10px 4px 10px;
     -webkit-transition: background-color 0.2s ease-out;
@@ -245,13 +253,7 @@ button:hover {
 }
 
 #statsCard {
-    background-color: #FC644D;
-    color: #001f3f;
     font-size: 1.2rem;
-}
-
-#statsCard h2 {
-    color: #FFFFFF;
 }
 
 #pokemonStats {
@@ -266,13 +268,18 @@ button:hover {
     padding: 5px 20px 10px 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    color: #5ADBFF;
+    background-color: #424242;
+}
+
+.detailsCard h2 {
+    color: #FFFFFF;
 }
 
 #pokemonDetails {
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
-    background-color: #3D9970;
     padding: 20px 60px 10px 20px;
 }
 
@@ -293,16 +300,7 @@ button:hover {
 
 .attributeValue {
     font-size: 1.2rem;
-    color: #001f3f;
     margin: 10px 0px;
-}
-
-#typeDetails {
-    background-color: #424242;
-}
-
-#typeDetails h2 {
-    color: #FFFFFF;
 }
 
 #overlayTypeList li {
@@ -322,22 +320,21 @@ button:hover {
 /* overlay evolution chain */
 
 #evolutions {
-    background-color: #0074D9;
     max-width: 500px;
 }
 
-#evolutions h2 {
-    color: #FFFFFF;
+.evolWrapper {
+    color: #5ADBFF;
+    border-radius: 30px;
+    border: 3px solid #FC644D;
 }
 
-.evolWrapper {
-    background-color: #424242;
-    color: #FFFFFF;
-    border-radius: 30px;
+#evolChain {
+    align-self: center;
 }
 
 .treeParent {
-    padding-right: 20px;
+    padding-right: 10px;
 }
 
 .tree li, .treeParent li {
@@ -345,23 +342,21 @@ button:hover {
     flex-direction: row;
     align-items: center;
     position: relative;
-    padding-left: 20px;
 }
 
 .tree div, .treeParent div {
-    border: 1px solid;
     text-align: center;
 }
 
 .tree ul, .treeParent ul {
-    padding-left: 20px;
+    padding-left: 24px;
     position: relative;
 }
 
 .tree li::before {
     content: '';
     position: absolute;
-    left: 0px;
+    left: -16px;
     top: 50%;
     display: block;
     border-right: 5px solid #FFFFFF;
@@ -371,6 +366,16 @@ button:hover {
     transform: translate(-50%, -50%) rotate(-45deg);
   }
 
+#altForms {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.altFormCard {
+    margin: 0px 10px 10px 10px;
+}
 
 @media only screen and (max-width: 1300px) {
     #bigPicWrapper {
@@ -401,7 +406,13 @@ button:hover {
 @media only screen and (max-width: 450px) {
     #bigPicWrapper {
         width: 100%;
+        padding: 10px 5px;
     }
+    
+    .detailsCard {
+        padding: 5px 10px 10px 10px;
+    }
+
 }
 
 /* ===MAIN BODY STYLING=== */

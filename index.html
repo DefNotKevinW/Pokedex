@@ -65,9 +65,7 @@
             <button type="button" aria-label="Close" onclick="closeFocusedPicture()">
                 <span aria-hidden="true">x</span>
             </button>
-            <div class="titleContainer">
-                <h1 id="overlayName"></h1>
-            </div>
+            <span class="titleContainer"><h1 id="overlayName"></h1></span>
 
             <div class="colWrapper">
                 <div class="overlayCol">
@@ -111,15 +109,19 @@
                         <table id="pokemonStats">
                         </table>
                     </div>
+                    <div id="varietyCard" class="detailsCard">
+                        <h2>Alternate Forms</h2>
+                        <div id="loadingRing3"><div></div><div></div><div></div><div></div></div>
+                        <div id="altForms"></div>
+                    </div>
                 </div>
             </div>
             <div id="evolutions" class="detailsCard">
-                <div id="loadingRing2"><div></div><div></div><div></div><div></div></div>
                 <h2>Evolution Chain</h2>
+                <div id="loadingRing2"><div></div><div></div><div></div><div></div></div>
                 <ul id="evolChain" class="treeParent">
                 </ul>
             </div>
-            
         </div>
     </section>
 
