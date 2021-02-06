@@ -60,7 +60,7 @@ header h1 {
     transition: background-color 0.2s ease-out;
 }
 
-.backToTopLink:link, .backToTopLink:visited {
+a:link, a:visited {
     text-decoration: none;
 }
 
@@ -262,7 +262,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 40px 15px 50px 15px;
+    margin: 40px 15px 0px 15px;
     width: 100%;
     max-width: 400px;
 }
@@ -399,6 +399,21 @@ button:hover {
     width: 100%;
 }
 
+#bulbapediaLink {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #212121;
+    color: #FFFFFF;
+    -webkit-transition: background-color 0.2s ease-out;
+    -moz-transition: background-color 0.2s ease-out;
+    -o-transition: background-color 0.2s ease-out;
+    transition: background-color 0.2s ease-out;
+}
+
+#bulbapediaLink:hover {
+    background-color: #5ADBFF;
+}
+
 .altFormCard {
     margin: 0px 10px 10px 10px;
 }
@@ -485,10 +500,10 @@ main {
     width: 64px;
     height: 64px;
     margin: 8px;
-    border: 8px solid #FF4136;
+    border: 8px solid #5ADBFF;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #FF4136 transparent transparent transparent;
+    border-color: #5ADBFF transparent transparent transparent;
   }
   .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;

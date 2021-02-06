@@ -107,7 +107,7 @@ Promise.all(promises[1])
     .then(results => {
         pokemonData = results.map(pokemon => {
             return {
-                name: pokemon.name,
+                name: pokemon.species.name,
                 id: pokemon.id,
                 type: getType(pokemon),
                 sprite: pokemon.sprites.front_default,
@@ -182,7 +182,7 @@ function loadRestOfData() {
         .then(results => {
             let pokemonData2 = results.map(pokemon => {
                 return {
-                    name: pokemon.name,
+                    name: pokemon.species.name,
                     id: pokemon.id,
                     type: getType(pokemon),
                     sprite: pokemon.sprites.front_default,
@@ -273,7 +273,7 @@ function createEvolLeaf(chain, parent) {
 
     img.src = pokemonData[id - 1].sprite;
 
-    name.appendChild(document.createTextNode(chain.species.name));
+    name.appendChild(document.createTextNode(capitalizeString(chain.species.name)));
 
     wrapper.appendChild(img);
     wrapper.appendChild(name);
@@ -632,6 +632,9 @@ function setFocusedPicture(pokemon) {
     // create the weaknesses list
     createWeaknessList(pokemon);
 
+    // add the bulbapedia link
+    document.getElementById("bulbapediaLink").href = createBulbLink(pokemon);
+
     document.getElementById("overlayID").style.display = "block";
 }
 
@@ -644,6 +647,7 @@ function closeFocusedPicture() {
     document.getElementById("abilities").children[1].innerHTML = "";
     document.getElementById("evolChain").innerHTML = "";
     document.getElementById("altForms").innerHTML = "";
+    document.getElementById("bulbapediaLink").href = "";
 }
 
 function createAbilityList(pokemon) {
@@ -652,12 +656,12 @@ function createAbilityList(pokemon) {
         let li = document.createElement("li");
         let span = document.createElement("span");
         if (!pokemon.abilities[ability]) {
-            span.appendChild(document.createTextNode(capitalizeString(ability)));
+            span.appendChild(document.createTextNode(capitalizeString(ability.replace("-", " "))));
             span.setAttribute("class", "attributeValue");
             li.appendChild(span);
         }
         else {
-            span.appendChild(document.createTextNode("(" + capitalizeString(ability) + ")"));
+            span.appendChild(document.createTextNode("(" + capitalizeString(ability.replace("-", " ")) + ")"));
             span.setAttribute("class", "attributeValue");
             li.appendChild(span);
         }
@@ -672,7 +676,7 @@ function createStatList(pokemon) {
             statName = newRow.insertCell(0), 
             moveVal = newRow.insertCell(1);
         
-        statName.appendChild(document.createTextNode(capitalizeString(stat)));
+        statName.appendChild(document.createTextNode(capitalizeString(stat.replace("-", " "))));
         moveVal.appendChild(document.createTextNode(pokemon.stats[stat]));
     });
 }
@@ -687,11 +691,22 @@ function createWeaknessList(pokemon) {
     });
 }
 
+function createBulbLink(pokemon) {
+    return "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.name;
+}
+
 /* BASIC CONVERSION / DATA MANIPULATION FUNCTIONS */
 
 function capitalizeString(string) {
     /* capitalize a string */
-    return string[0].toUpperCase() + string.slice(1, string.length);
+    let lst = string.split(" "),
+        result = "";
+    
+    for (let i = 0; i < lst.length - 1; i++) {
+        result = result + lst[i][0].toUpperCase() + lst[i].slice(1, lst[i].length) + " "
+    }
+
+    return result + lst[lst.length - 1][0].toUpperCase() + lst[lst.length - 1].slice(1, lst[lst.length - 1].length);
 }
 
 function formatPokemonId(id) {
@@ -720,8 +735,4 @@ function calculateTypeWeakness(pokemon) {
     }
 
     return weaknesses;
-}
-
-function formatPokemonName(name, id) {
-
 }
