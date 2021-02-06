@@ -309,8 +309,9 @@ function getVarieties(species) {
                     weight: (0.1 * pokemon.weight).toFixed(2) + " kg"
                 };
             });
-
-            forms.slice(1, forms.length).forEach(pokemon => {createAltForm(pokemon)});
+            forms.slice(1, forms.length).forEach(pokemon => {
+                createAltForm(pokemon);
+            });
         })
         .catch(err => {
             console.log(err);
@@ -322,7 +323,21 @@ function createAltForm(pokemon) {
         img = document.createElement("img"),
         name = document.createElement("p");
     wrapper.setAttribute("class", "altFormCard")
-    img.src = pokemon.sprite;
+    
+    if (pokemon.sprite === null) {
+        if (pokemon.offArt === null) {
+
+        }
+        else {
+            img.src = pokemon.offArt;
+            img.width = "96";
+            img.height = "96";
+        }
+    }
+    else {
+        img.src = pokemon.sprite;
+    }
+    
     name.appendChild(document.createTextNode(capitalizeString(pokemon.name)));
 
     wrapper.appendChild(img);
