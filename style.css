@@ -41,7 +41,7 @@ header {
 }
 
 header h1 {
-    color: #fff;
+    color: #FE9000;
     font-family: "Ubuntu Mono", monospace;
     font-size: 4rem;
     margin-top: 20px;
@@ -83,14 +83,13 @@ a:link, a:visited {
         background-image: url("./resources/pokemon-background-image/494.svg");
         background-position: center;
     }
+
+    header h1 {
+        color: #FFFFFF;
+    }
 }
 
 /* SEACH BAR STYLING */
-
-.searchBarContainer {
-    align-self: flex-start;
-    margin-left: 20px;
-}
 
 .searchB {
     height: 38px;
@@ -117,6 +116,8 @@ input[type="search"]::-webkit-search-results-decoration {
     color: #5ADBFF;
     border-radius: 5px;
     padding: 8px 10px;
+    font-size: 1.1rem;
+    font-family: "Ubuntu Mono", monospace;
 }
 
 .selectorContainer {
