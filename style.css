@@ -7,6 +7,7 @@
 body {
     font-family: "Ubuntu Mono", monospace;
     text-rendering: optimizeLegibility;
+    background-color: #424242;
     margin: 0;
 }
 
@@ -36,7 +37,7 @@ header {
     background-position: top left, top right;
     background-repeat: no-repeat;
     background-color: #212121;
-    height: 400px;
+    min-height: 400px;
 }
 
 header h1 {
@@ -44,7 +45,7 @@ header h1 {
     font-family: "Ubuntu Mono", monospace;
     font-size: 4rem;
     margin-top: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     padding-top: 0;
 }
 
@@ -92,9 +93,9 @@ a:link, a:visited {
 }
 
 .searchB {
-    height: 40px;
+    height: 38px;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-family: "Ubuntu Mono", monospace;
 }
 
@@ -115,6 +116,12 @@ input[type="search"]::-webkit-search-results-decoration {
     background-color: #424242;
     color: #5ADBFF;
     border-radius: 5px;
+    padding: 8px 10px;
+}
+
+.selectorContainer {
+    align-items: flex-end;
+    padding: 20px 20px;
 }
 
 /* ===OVERLAY STYLING=== */
@@ -383,10 +390,6 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 /* ===MAIN BODY STYLING=== */
-
-body {
-    background-color: #424242;
-}
 
 main {
     background-color: #fff;

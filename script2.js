@@ -1,9 +1,4 @@
-/*
-how to fix current loading:
-after searching up a string (eg. bul) and deleting a character,
-the last few pokemon that shoudnt be on the screen are stil on teh screen
-to fiux this issue, we need to completely reset the display list
-*/
+
 const typeRelations = {
     typeOrder: {
         0: "normal",
@@ -438,13 +433,13 @@ function addPokemon() {
     dequeuePokemon();
 }
 
-function resetAllPokemon(input="") {
+function resetAllPokemon() {
     resetCards();
 
     pokemonIdList["queue"] = [];
     pokemonIdList["displayed"] = [];
 
-    filterQueue(input);
+    filterQueue(document.getElementById("searchBar").value);
 
     for (let i = 0; i < 24; i++) {
         addPokemon();
@@ -481,38 +476,54 @@ function sortPokemonData(ListName) {
     /* we can sort by name, id, height, weight, stat (hp, atk, sp. atk, spd, def, sp. def) */
     const sortBy = document.getElementById("sortBy").value,
         sortOrder = document.getElementById("sortOrder").value,
-        stat = ["hp", "attack", "special-atk", "speed", "defense", "special-defense"];
+        stat = ["hp", "attack", "special-attack", "speed", "defense", "special-defense"];
 
     if (sortBy === "id") {
         if (sortOrder === "ascend") {
-            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[a - 1].id) - parseInt(pokemonData[b - 1].id)});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseInt(pokemonData[a - 1].id) - parseInt(pokemonData[b - 1].id);
+            });
         }
         else {
-            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[b - 1].id) - parseInt(pokemonData[a - 1].id)});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseInt(pokemonData[b - 1].id) - parseInt(pokemonData[a - 1].id);
+            });
         }
     }
     else if (sortBy === "name") {
         if (sortOrder === "ascend") {
-            pokemonIdList[ListName].sort((a, b) => {return pokemonData[a - 1].name.localeCompare(pokemonData[b - 1].name)});
+            pokemonIdList[ListName].sort((a, b) => {
+                return pokemonData[a - 1].name.localeCompare(pokemonData[b - 1].name);
+            });
         }
         else {
-            pokemonIdList[ListName].sort((a, b) => {return pokemonData[b - 1].name.localeCompare(pokemonData[a - 1].name)});
+            pokemonIdList[ListName].sort((a, b) => {
+                return pokemonData[b - 1].name.localeCompare(pokemonData[a - 1].name);
+            });
         }
     }
     else if (stat.includes(sortBy)) {
         if (sortOrder === "ascend") {
-            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[a - 1].stats[sortBy]) - parseInt(pokemonData[b - 1].stats[sortBy])});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseInt(pokemonData[a - 1].stats[sortBy]) - parseInt(pokemonData[b - 1].stats[sortBy]);
+            });
         }
         else {
-            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[b - 1].stats[sortBy]) - parseInt(pokemonData[a - 1].stats[sortBy])});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseInt(pokemonData[b - 1].stats[sortBy]) - parseInt(pokemonData[a - 1].stats[sortBy]);
+            });
         }
     }
     else {
         if (sortOrder === "ascend") {
-            pokemonIdList[ListName].sort((a, b) => {return parseFloat(pokemonData[a - 1][sortBy]) - parseFloat(pokemonData[b - 1][sortBy])});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseFloat(pokemonData[a - 1][sortBy]) - parseFloat(pokemonData[b - 1][sortBy]);
+            });
         }
         else {
-            pokemonIdList[ListName].sort((a, b) => {return parseFloat(pokemonData[b - 1][sortBy]) - parseFloat(pokemonData[a - 1][sortBy])});
+            pokemonIdList[ListName].sort((a, b) => {
+                return parseFloat(pokemonData[b - 1][sortBy]) - parseFloat(pokemonData[a - 1][sortBy]);
+            });
         }
     }
 }

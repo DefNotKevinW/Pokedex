@@ -21,34 +21,12 @@
             <div class="horiFlex searchBarContainer">
                 <input type="search" id="searchBar" class="searchB" placeholder="Search for Pokémon">
 
-                <select id="searchSelect" class="standardSelect">
+                <select id="searchSelect" class="standardSelect searchSelect">
                     <option value="name">Name</option>
                     <option value="id">Id</option>
                     <option value="type">Type</option>
                 </select>
             </div>
-
-            <div class="horiFlex selectorContainer">
-                <select id="sortBy" class="standardSelect">
-                    <option value="id">Id</option>
-                    <option value="name">Name</option>
-                    <option value="weight">Weight</option>
-                    <option value="height">Height</option>
-                    <option value="hp">Hp</option>
-                    <option value="attack">Attack</option>
-                    <option value="special-attack">Special Attack</option>
-                    <option value="speed">Speed</option>
-                    <option value="defense">Defense</option>
-                    <option value="special-defense">Special Defense</option>
-                </select>
-
-                <select id="sortOrder" class="standardSelect">
-                    <option value="ascend">Ascending</option>
-                    <option value="descend">Descending</option>
-                </select>
-            </div>
-
-            <button type="button" onclick="resetAllPokemon()">Sort!</button>
         </form>
 
         <a href="#topAnchor" class="backToTopLink">Back to top</a>
@@ -122,6 +100,27 @@
     </section>
 
     <main>
+        <form class="vertiFlex selectorContainer">
+            <div class="horiFlex">
+                <select id="sortBy" class="standardSelect" onclick="resetAllPokemon()">
+                    <option value="id">Id</option>
+                    <option value="name">Name</option>
+                    <option value="weight">Weight</option>
+                    <option value="height">Height</option>
+                    <option value="hp">Hp</option>
+                    <option value="attack">Attack</option>
+                    <option value="special-attack">Special Attack</option>
+                    <option value="speed">Speed</option>
+                    <option value="defense">Defense</option>
+                    <option value="special-defense">Special Defense</option>
+                </select>
+
+                <select id="sortOrder" class="standardSelect" onclick="resetAllPokemon()">
+                    <option value="ascend">Ascending</option>
+                    <option value="descend">Descending</option>
+                </select>
+            </div>
+        </form>
         <div id="pokemonGrid" class="mainGrid">
 
         </div>
