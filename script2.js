@@ -1,43 +1,10 @@
 /*
-IDEAS:
--load all required data from pokeapi at the beginning
--play a loading animation while the user waits for all the data to be loaded in
--once loading is completed, allow the user to interact with the pokedex
-
-NEW IDEA
-default page is a grid of pokemon "cards"
-cards contain the following information:
-- name
-- type
-- sprite
-when you click on one of them, a pokedex appears (animated) and gives more detailed information on the pokemon
-these detailed stats include:
-- name
-- id
-- type
-- sprite
-- official artwork
-- stats
-- abilities
-- height
-- weight
-
-features to add:
-- pokemon forms 
-- evolution chain
+how to fix current loading:
+after searching up a string (eg. bul) and deleting a character,
+the last few pokemon that shoudnt be on the screen are stil on teh screen
+to fiux this issue, we need to completely reset the display list
 */
-let genToId = {
-    "gen1": [1, 151, true],
-    "gen2": [152, 251, false],
-    "gen3": [252, 386, false],
-    "gen4": [387, 493, false],
-    "gen5": [494, 649, false],
-    "gen6": [650, 721, false],
-    "gen7": [722, 809, false],
-    "gen8": [810, 898, false]
-};
-
-let typeRelations = {
+const typeRelations = {
     typeOrder: {
         0: "normal",
 		1: "fire",
@@ -136,11 +103,11 @@ Promise.all(promises[1])
                     searchForCardType(pokeCardList, input);
                 }
                 else {
+                    document.getElementById("pokemonGrid").innerHTML = "";
+                    pokemonIdList["displayed"] = [];
                     filterQueue(input);
                     filterDisplayed(input);
-                    //filterPokemonFromGen();
                 }
-                
             }
         });
 
@@ -375,10 +342,12 @@ function getAbilities(pokemon) {
 /* QUEUE AND DISPLAY RELATED FUNCTIONS */
 
 function filterQueue(input) {
+    const searchType = document.getElementById("searchSelect").value;
+
     // here we dequeue any pokemon that no longer satisfy the searched properties
     for (let i = pokemonIdList["queue"].length - 1; i >= 0; i--) {
         // if pokemon name does not contain input, remove it from the queue
-        if (!pokemonData[pokemonIdList["queue"][i] - 1].name.toLowerCase().includes(input)) {
+        if (checkFilterCondition(pokemonData[pokemonIdList["queue"][i] - 1], searchType, input)) {
             dequeuePokemon(i);
         }
     }
@@ -387,18 +356,18 @@ function filterQueue(input) {
     // note that pokemon that are displayed should not be queued up
     for (let i = 0; i < pokemonData.length; i++) {
         const pokemon = pokemonData[i]
-        if (!pokemonIdList["displayed"].includes(pokemon.id) && pokemon.name.toLowerCase().includes(input)) {
+        if (!pokemonIdList["displayed"].includes(pokemon.id) && !checkFilterCondition(pokemon, searchType, input)) {
             queuePokemon(pokemon.id);
         }
     }
+
+    sortPokemonData("queue");
 }
 
 function queuePokemon(id) {
     if (!pokemonIdList["queue"].includes(id)) {
         pokemonIdList["queue"].push(id);
     }
-
-    pokemonIdList["queue"].sort((a, b) => a - b);
 }
 
 function dequeuePokemon(index = 0) {
@@ -406,10 +375,12 @@ function dequeuePokemon(index = 0) {
 }
 
 function filterDisplayed(input) {
+    const searchType = document.getElementById("searchSelect").value;
+
     // here we undisplay any pokemon that no longer satisfy the searched properties
     for (let i = pokemonIdList["displayed"].length - 1; i >= 0; i--) {
         // if pokemon name does not contain input, remove it from the display
-        if (!pokemonData[pokemonIdList["displayed"][i] - 1].name.toLowerCase().includes(input)) {
+        if (checkFilterCondition(pokemonData[pokemonIdList["displayed"][i] - 1], searchType, input)) {
             removePokemon(i);
             // additionally, if the queue isn't empty, we can replace the removed pokemon with a new one.
             if (pokemonIdList["queue"].length > 0) {
@@ -428,6 +399,29 @@ function filterDisplayed(input) {
     displayCards();
 }
 
+function checkFilterCondition(pokemon, searchType, input) {
+    /* returns an array of two bools, the first bool being whether or not  */
+    if (input === "") {
+        return false;
+    }
+    else if (searchType === "name") {
+        return !pokemon.name.toLowerCase().includes(input);
+    }
+    else if (searchType === "id") {
+        return !(pokemon.id === parseInt(input));
+    }
+    else {
+        let hasType = false;
+        pokemon.type.forEach(t => {
+            if (t.includes(input)) {
+                hasType = true;
+            }
+        })
+
+        return !hasType;
+    }
+}
+
 function removePokemon(index) {
     let displayed = pokemonIdList["displayed"];
 
@@ -444,13 +438,13 @@ function addPokemon() {
     dequeuePokemon();
 }
 
-function resetAllPokemon() {
+function resetAllPokemon(input="") {
     resetCards();
 
     pokemonIdList["queue"] = [];
     pokemonIdList["displayed"] = [];
 
-    filterQueue("");
+    filterQueue(input);
 
     for (let i = 0; i < 24; i++) {
         addPokemon();
@@ -475,12 +469,52 @@ function displayCards() {
     // when we add a pokemon, we want everything to maintain its correct order (ascending by pokemon id)
     // so we will sort the displayed
     resetCards();
-    pokemonIdList["displayed"].sort((a, b) => a - b);
+    sortPokemonData("displayed");
 
     // add all cards to dom
     pokemonIdList["displayed"].forEach(id => {
         createPokemonCard(id);
     });
+}
+
+function sortPokemonData(ListName) {
+    /* we can sort by name, id, height, weight, stat (hp, atk, sp. atk, spd, def, sp. def) */
+    const sortBy = document.getElementById("sortBy").value,
+        sortOrder = document.getElementById("sortOrder").value,
+        stat = ["hp", "attack", "special-atk", "speed", "defense", "special-defense"];
+
+    if (sortBy === "id") {
+        if (sortOrder === "ascend") {
+            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[a - 1].id) - parseInt(pokemonData[b - 1].id)});
+        }
+        else {
+            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[b - 1].id) - parseInt(pokemonData[a - 1].id)});
+        }
+    }
+    else if (sortBy === "name") {
+        if (sortOrder === "ascend") {
+            pokemonIdList[ListName].sort((a, b) => {return pokemonData[a - 1].name.localeCompare(pokemonData[b - 1].name)});
+        }
+        else {
+            pokemonIdList[ListName].sort((a, b) => {return pokemonData[b - 1].name.localeCompare(pokemonData[a - 1].name)});
+        }
+    }
+    else if (stat.includes(sortBy)) {
+        if (sortOrder === "ascend") {
+            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[a - 1].stats[sortBy]) - parseInt(pokemonData[b - 1].stats[sortBy])});
+        }
+        else {
+            pokemonIdList[ListName].sort((a, b) => {return parseInt(pokemonData[b - 1].stats[sortBy]) - parseInt(pokemonData[a - 1].stats[sortBy])});
+        }
+    }
+    else {
+        if (sortOrder === "ascend") {
+            pokemonIdList[ListName].sort((a, b) => {return parseFloat(pokemonData[a - 1][sortBy]) - parseFloat(pokemonData[b - 1][sortBy])});
+        }
+        else {
+            pokemonIdList[ListName].sort((a, b) => {return parseFloat(pokemonData[b - 1][sortBy]) - parseFloat(pokemonData[a - 1][sortBy])});
+        }
+    }
 }
 
 function createPokemonCard(id) {
@@ -520,7 +554,8 @@ function createPokemonCard(id) {
     pokemonID.appendChild(document.createTextNode(formatPokemonId(pokemon.id)));
 
     // create the content wrapper
-    contentWrapper.setAttribute("class", "contentWrapper");
+    contentWrapper.setAttribute("class", "vertiFlex");
+    contentWrapper.className += " contentWrapper";
 
     // create the transparent div cover
     transpCover.setAttribute("class", "transpCardCover");
@@ -546,63 +581,6 @@ function createTypeLi (typeList, pokemon) {
         typeList.appendChild(li);
     });
 }
-
-/*function togglePokemonGen(n) {
-    if (genToId["gen" + n][2]) {
-        genToId["gen" + n][2] = false;
-    }
-    else {
-        genToId["gen" + n][2] = true;
-    }
-    //filterPokemonFromGen();
-}*/
-
-/*function filterPokemonFromGen() {
-    // we want to remove everything thats not in at least one of the chosen generations
-    // the idea is that we use normal filters first, then specialized filters
-
-    // note that this function should only be removing things from queue and displayed, 
-    // while only moving pokemon from queued to displayed
-
-    // this for loop dequeues anything that isn't from selected generations
-    for (let i = pokemonIdList["queue"].length - 1; i >= 0; i--) {
-        let isFromGen = false, j = 0;
-        
-        while (j < Object.keys(genToId).length && !isFromGen) {
-            const genVal = genToId["gen" + String(j + 1)];
-            if (genVal[2] && pokemonIdList["queue"][i] <= genVal[1] && pokemonIdList["queue"][i] >= genVal[0]) {
-                isFromGen = true;
-            }
-            j++;
-        }
-        if (!isFromGen) {
-            dequeuePokemon(i);
-        }
-    }
-
-    // this loop removes any displayed pokemon that aren't from selected generations
-    for (let i = pokemonIdList["displayed"].length - 1; i >= 0; i--) {
-        let isFromGen = false, j = 0;
-
-        while (j < Object.keys(genToId).length && !isFromGen) {
-            const genVal = genToId["gen" + String(j + 1)];
-            if (genVal[2] && pokemonIdList["displayed"][i] <= genVal[1] && pokemonIdList["displayed"][i] >= genVal[0]) {
-                isFromGen = true;
-            }
-            j++;
-        }
-        if (!isFromGen) {
-            removePokemon(i);
-            if (pokemonIdList["queue"].length > 0) {
-                addPokemon();
-            }
-            
-        }
-    }
-    console.log("here it is!");
-    console.log(pokemonIdList["displayed"]);
-    console.log(pokemonIdList["queue"]);
-}*/
 
 function setFocusedPicture(pokemon) {
     document.getElementById("loadingRing2").classList.add("lds-ring");

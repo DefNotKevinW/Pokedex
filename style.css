@@ -16,11 +16,21 @@ ul,li {
     padding: 0;
 }
 
-header {
+.vertiFlex {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.horiFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+header {
     background-image: url("./resources/pokemon-background-image/644.svg"),
         url("./resources/pokemon-background-image/643.svg");
     background-position: top left, top right;
@@ -36,13 +46,6 @@ header h1 {
     margin-top: 20px;
     margin-bottom: 10px;
     padding-top: 0;
-}
-
-#searchForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .backToTopLink {
@@ -84,20 +87,18 @@ a:link, a:visited {
 /* SEACH BAR STYLING */
 
 .searchBarContainer {
-    display: flex;
-    flex-direction: row;
     align-self: flex-start;
     margin-left: 20px;
 }
 
-#searchBar {
+.searchB {
     height: 40px;
     border-radius: 8px;
     font-size: 1.1rem;
     font-family: "Ubuntu Mono", monospace;
 }
 
-#searchBar:focus {
+.searchB:focus {
     outline: none;
 }
 
@@ -108,82 +109,17 @@ input[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
 
-/* GENERATION FILTER LIST STYLING */
+/* DROPDOWN SELECT STYLING */
 
-.genContainer {
-    display: none; /*CURRENTLY INVISIBLE UnTIL USABLE*/
-    max-width: 640px;
-    font-size: 13px;
-}
-
-.generationCheckList {
-    padding: 20px;
-}
-
-.generationCheckList li {
-    display: inline;
-}
-
-.generationCheckList li:hover {
-    opacity: 85%;
-}
-
-.generationCheckList li label {
-    display: inline-block;
-    background-color: #ffffff;
-    color: #adadad;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 25px;
-    white-space: nowrap;
-    margin: 3px 0px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: all .2s;
-}
-
-.generationCheckList li label::before {
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 0.8rem;
-    padding: 2px 6px 2px 2px;
-    /*content: "\f067";*/
-    transition: transform .3s ease-in-out;
-}
-
-/*.generationCheckList li input[type="checkbox"]:checked + label::before {
-    content: "\f00c";
-    transform: rotate(-360deg);
-    transition: transform .3s ease-in-out;
-}*/
-
-.generationCheckList li input[type="checkbox"]:checked + label {
-    border: 2px solid#FF4136;
-    background-color: #FF4136;
-    color: #fff;
-    transition: all .2s;
-}
-
-.generationCheckList li input[type="checkbox"] {
-    display: absolute;
-}
-.generationCheckList li input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
+.standardSelect {
+    background-color: #424242;
+    color: #5ADBFF;
+    border-radius: 5px;
 }
 
 /* ===OVERLAY STYLING=== */
 
-#overlayID {
+.screenOverlay {
     display: none;
     position: fixed;
     overflow-y: scroll;
@@ -196,10 +132,8 @@ input[type="search"]::-webkit-search-results-decoration {
     z-index: 2;
 }
 
-#bigPicWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.overlayContentWrapper {
+    justify-content: flex-start;
     margin: 100px auto;
     padding: 10px 10px;
     position: relative;
@@ -211,19 +145,18 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .titleContainer {
-    display: flex;
-    justify-content: center;
+    align-items: flex-start;
     width: 100%;
     background-color: #424242;
     border-radius: 8px;
     color: #FFFFFF;
 }
 
-#bigPicWrapper h1 {
+.overlayContentWrapper h1 {
     font-size: 2.7rem;
 }
 
-#bigPicWrapper h2 {
+.overlayContentWrapper h2 {
     font-size: 2rem;
     margin-top: 12px;
     margin-bottom: 20px;
@@ -231,7 +164,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 /* close button */
 
-button {
+.closeButton {
     border: 0;
     cursor: pointer;
     outline: none;
@@ -248,20 +181,17 @@ button {
     transition: background-color 0.2s ease-out;
 }
 
-button:hover {
+.closeButton:hover {
     background-color: #FF4136;
 }
 
 .colWrapper {
-    display: flex;
-    justify-content: center;
+    align-items: flex-start;
     width: 100%;
 }
 
 .overlayCol {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: flex-start;
     margin: 40px 15px 0px 15px;
     width: 100%;
     max-width: 400px;
@@ -269,7 +199,7 @@ button:hover {
 
 /* overlay details */
 
-#overlaySprite {
+.overlayPicture {
     height: auto;
     width: 100%;
     max-width: 400px;
@@ -278,18 +208,17 @@ button:hover {
     margin-bottom: 20px;
 }
 
-#statsCard {
+.statsC {
     font-size: 1.2rem;
 }
 
-#pokemonStats {
+.statTable {
     width: 100%;
 }
 
 .detailsCard {
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
     width: 100%;
     padding: 5px 20px 10px 20px;
     border-radius: 8px;
@@ -302,7 +231,7 @@ button:hover {
     color: #FFFFFF;
 }
 
-#pokemonDetails {
+.pokemonDet {
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
@@ -310,8 +239,8 @@ button:hover {
 }
 
 .col {
-    display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-start;
 }
 
 .col ul li {
@@ -345,22 +274,19 @@ button:hover {
 
 /* overlay evolution chain */
 
-#evolutions {
+.evolCard {
     max-width: 500px;
 }
 
 .evolWrapper {
     color: #5ADBFF;
     border-radius: 30px;
-    border: 3px solid #FC644D;
-}
-
-#evolChain {
-    align-self: center;
+    /*border: 3px solid #FC644D;*/
 }
 
 .treeParent {
     padding-right: 10px;
+    align-self: center;
 }
 
 .tree li, .treeParent li {
@@ -392,14 +318,14 @@ button:hover {
     transform: translate(-50%, -50%) rotate(-45deg);
   }
 
-#altForms {
-    display: flex;
-    flex-direction: row;
+.alternateForms {
+    justify-content: flex-start;
+    align-items: flex-start;
     flex-wrap: wrap;
     width: 100%;
 }
 
-#bulbapediaLink {
+.bulbLink {
     padding: 5px 10px;
     border-radius: 5px;
     background-color: #212121;
@@ -410,7 +336,7 @@ button:hover {
     transition: background-color 0.2s ease-out;
 }
 
-#bulbapediaLink:hover {
+.bulbLink:hover {
     background-color: #5ADBFF;
 }
 
@@ -419,19 +345,19 @@ button:hover {
 }
 
 @media only screen and (max-width: 1300px) {
-    #bigPicWrapper {
+    .overlayContentWrapper {
         width: 80%;
     }
 }
 
 @media only screen and (max-width: 950px) {
-    #bigPicWrapper {
+    .overlayContentWrapper {
         width: 90%;
     }
 }
 
 @media only screen and (max-width: 800px) {
-    #bigPicWrapper {
+    .overlayContentWrapper {
         width: 95%;
     }
     .colWrapper {
@@ -445,7 +371,7 @@ button:hover {
 }
 
 @media only screen and (max-width: 450px) {
-    #bigPicWrapper {
+    .overlayContentWrapper {
         width: 100%;
         padding: 10px 5px;
     }
@@ -531,7 +457,7 @@ main {
 
 /* POKEMON CARDS */
 
-#pokemonGrid {
+.mainGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     row-gap: 5px;
@@ -764,13 +690,8 @@ main {
     color: #fff;
 }
 
-
 .contentWrapper {
     grid-area: 1 / 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .transpCardCover {

@@ -13,78 +13,70 @@
 
 <body>
     <div id="topAnchor"></div>
-    <header>
+    <header class="vertiFlex">
 
         <h1>Pokédex</h1>
 
-        <form id="searchForm">
-            <div class="searchBarContainer">
-                <input type="search" id="searchBar" placeholder="Search for Pokémon">
+        <form id="searchForm" class="vertiFlex">
+            <div class="horiFlex searchBarContainer">
+                <input type="search" id="searchBar" class="searchB" placeholder="Search for Pokémon">
+
+                <select id="searchSelect" class="standardSelect">
+                    <option value="name">Name</option>
+                    <option value="id">Id</option>
+                    <option value="type">Type</option>
+                </select>
             </div>
 
-            <div class=genContainer>
-                <ul class=generationCheckList>
-                    <li><input id="gen1Tog" type="checkbox" 
-                        onclick="togglePokemonGen('1')" checked>
-                        <label for="gen1Tog">First Gen</label></li>
+            <div class="horiFlex selectorContainer">
+                <select id="sortBy" class="standardSelect">
+                    <option value="id">Id</option>
+                    <option value="name">Name</option>
+                    <option value="weight">Weight</option>
+                    <option value="height">Height</option>
+                    <option value="hp">Hp</option>
+                    <option value="attack">Attack</option>
+                    <option value="special-attack">Special Attack</option>
+                    <option value="speed">Speed</option>
+                    <option value="defense">Defense</option>
+                    <option value="special-defense">Special Defense</option>
+                </select>
 
-                    <li><input id="gen2Tog" type="checkbox"
-                        onclick="togglePokemonGen('2')">
-                        <label for="gen2Tog">Second Gen</label></li>
-
-                    <li><input id="gen3Tog" type="checkbox"
-                        onclick="togglePokemonGen('3')">
-                        <label for="gen3Tog">Third Gen</label></li>
-
-                    <li><input id="gen4Tog" type="checkbox"
-                        onclick="togglePokemonGen('4')">
-                        <label for="gen4Tog">Fourth Gen</label></li>
-
-                    <li><input id="gen5Tog" type="checkbox"
-                        onclick="togglePokemonGen('5')">
-                        <label for="gen5Tog">Fifth Gen</label></li>
-
-                    <li><input id="gen6Tog" type="checkbox"
-                        onclick="togglePokemonGen('6')">
-                        <label for="gen6Tog">Sixth Gen</label></li>
-
-                    <li><input id="gen7Tog" type="checkbox"
-                        onclick="togglePokemonGen('7')">
-                        <label for="gen7Tog">Seventh Gen</label></li>
-
-                    <li><input id="gen8Tog" type="checkbox"
-                        onclick="togglePokemonGen('8')">
-                        <label for=gen8Tog>Eighth Gen</label></li>
-                </ul>
+                <select id="sortOrder" class="standardSelect">
+                    <option value="ascend">Ascending</option>
+                    <option value="descend">Descending</option>
+                </select>
             </div>
+
+            <button type="button" onclick="resetAllPokemon()">Sort!</button>
         </form>
 
         <a href="#topAnchor" class="backToTopLink">Back to top</a>
         
     </header>
 
-    <section id="overlayID">
-        <div id="bigPicWrapper">
-            <button type="button" aria-label="Close" onclick="closeFocusedPicture()">
+    <section id="overlayID" class="screenOverlay">
+        <div id="bigPicWrapper" class="vertiFlex overlayContentWrapper">
+            <button type="button" class="closeButton" aria-label="Close" onclick="closeFocusedPicture()">
                 <span aria-hidden="true">x</span>
             </button>
-            <span class="titleContainer"><h1 id="overlayName"></h1></span>
+            <span class="horiFlex titleContainer"><h1 id="overlayName"></h1></span>
 
-            <div class="colWrapper">
-                <div class="overlayCol">
-                    <img id="overlaySprite" src="">
+            <div class="horiFlex colWrapper">
+                <div class="vertiFlex overlayCol">
+                    <img id="overlaySprite" class="overlayPicture" src="">
                     
-                    <div id="typeDetails" class="detailsCard">
+                    <div id="typeDetails" class="vertiFlex detailsCard">
                         <h2>Types</h2>
-                        <ul id="overlayTypeList" class="cardTypeList"></ul>
+                        <ul id="overlayTypeList" class="cardTypeList overlayTypes"></ul>
                         <h2>Weaknesses</h2>
-                        <ul id="overlayTypeDisadv" class="cardTypeList"></ul>
+                        <ul id="overlayTypeDisadv" class="cardTypeList overlayTypes"></ul>
                     </div>
                 </div>
 
                 <div class="overlayCol">
-                    <div id="pokemonDetails" class="detailsCard">
-                        <div class="col">
+                    <div id="pokemonDetails" class="vertiFlex detailsCard pokemonDet">
+                        <div class="vertiFlex col">
                             <ul>
                                 <li id="height">
                                     <span class="attributeTitle">Height</span>
@@ -96,7 +88,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col">
+                        <div class="vertiFlex col">
                             <ul>
                                 <li id="abilities">
                                     <span class="attributeTitle">Abilities</span>
@@ -107,30 +99,30 @@
                         </div>
                     </div>
                     
-                    <div id="statsCard" class="detailsCard">
+                    <div id="statsCard" class="vertiFlex detailsCard statsC">
                         <h2>Stats</h2>
-                        <table id="pokemonStats">
+                        <table id="pokemonStats" class="statTable">
                         </table>
                     </div>
-                    <div id="varietyCard" class="detailsCard">
+                    <div id="varietyCard" class="vertiFlex detailsCard">
                         <h2>Alternate Forms</h2>
                         <div id="loadingRing3"><div></div><div></div><div></div><div></div></div>
-                        <div id="altForms"></div>
+                        <div id="altForms" class="horiFlex alternateForms"></div>
                     </div>
                 </div>
             </div>
-            <div id="evolutions" class="detailsCard">
+            <div id="evolutions" class="vertiFlex detailsCard evolCard">
                 <h2>Evolution Chain</h2>
                 <div id="loadingRing2"><div></div><div></div><div></div><div></div></div>
                 <ul id="evolChain" class="treeParent">
                 </ul>
             </div>
-            <a href="" id="bulbapediaLink" target="_blank">For more details, visit Bulbapedia!</a>
+            <a href="" id="bulbapediaLink" class="bulbLink" target="_blank">For more details, visit Bulbapedia!</a>
         </div>
     </section>
 
     <main>
-        <div id="pokemonGrid">
+        <div id="pokemonGrid" class="mainGrid">
 
         </div>
         <div id="loadingRing1"><div></div><div></div><div></div><div></div></div>
