@@ -72,6 +72,17 @@ a:link, a:visited {
     background-color: #5ADBFF;
 }
 
+.githubLink {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    opacity: 20%;
+}
+
+.githubLink:hover {
+    opacity: 100%;
+}
+
 @media only screen and (max-width: 1365px) {
     header {
         background-image: url("./resources/pokemon-background-image/491.svg");
@@ -118,6 +129,10 @@ input[type="search"]::-webkit-search-results-decoration {
     padding: 8px 10px;
     font-size: 1.1rem;
     font-family: "Ubuntu Mono", monospace;
+}
+
+.standardSelect:hover {
+    cursor: pointer;
 }
 
 .selectorContainer {
@@ -385,7 +400,7 @@ input[type="search"]::-webkit-search-results-decoration {
     }
     
     .detailsCard {
-        padding: 5px 10px 10px 10px;
+        padding: 10px 10px 10px 10px;
     }
 
 }
