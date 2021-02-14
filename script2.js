@@ -68,7 +68,7 @@ document.getElementById("loadingRing1").classList.add("lds-ring");
 /* INITIAL LOADING */
 
 for (let i = 1; i < 49; i++) {
-    promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
+    promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i)));
 }
 
 Promise.all(promises[1])
@@ -143,7 +143,7 @@ function loadRestOfData() {
     and adds them to pokemonData. Resets the pokemon cards shown on the DOM. Returns nothing.
     */
     for (let i = 49; i < 899; i++) {
-        promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i) +"/"));
+        promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i)));
     }
 
     Promise.all(promises[2])
