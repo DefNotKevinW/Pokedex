@@ -41,7 +41,12 @@ header {
 }
 
 header h1 {
-    color: #FE9000;
+    color: #FFFFFF;
+    text-shadow:
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+     -1px 1px 0 #000,
+      1px 1px 0 #000;
     font-family: "Ubuntu Mono", monospace;
     font-size: 4rem;
     margin-top: 20px;
@@ -93,10 +98,6 @@ a:link, a:visited {
     header {
         background-image: url("./resources/pokemon-background-image/494.svg");
         background-position: center;
-    }
-
-    header h1 {
-        color: #FFFFFF;
     }
 }
 
