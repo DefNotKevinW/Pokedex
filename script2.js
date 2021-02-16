@@ -55,6 +55,7 @@ let pokemonIdList = {
 };
 
 // contains lists of fetched promises from pokeapi
+// (key 2 contains responses instead of promises)
 let promises = {
     1: [],
     2: []
@@ -68,7 +69,9 @@ document.getElementById("loadingRing1").classList.add("lds-ring");
 /* INITIAL LOADING */
 
 for (let i = 1; i < 49; i++) {
-    promises[1].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i)));
+    promises[1].push(
+        fetch("https://pokeapi.co/api/v2/pokemon/" + String(i))
+        );
 }
 
 Promise.all(promises[1])
@@ -137,13 +140,27 @@ Promise.all(promises[1])
 
 /* DATA LOADING RELATED FUNCTIONS */
 
-function loadRestOfData() {
+async function loadRestOfData() {
     /* 
     Loads pokemon id 49 to 898 from pokeapi and creates an object for each pokemon, 
     and adds them to pokemonData. Resets the pokemon cards shown on the DOM. Returns nothing.
     */
     for (let i = 49; i < 899; i++) {
-        promises[2].push(fetch("https://pokeapi.co/api/v2/pokemon/"+ String(i)));
+        await fetch("https://pokeapi.co/api/v2/pokemon/" + String(i))
+            .then(response => {
+                // if url with no / gives error, use url with / instead
+                // this is an issue with cloudflare according to the pokeapi issues page. 
+                if (!response.ok) {
+                    fetch("https://pokeapi.co/api/v2/pokemon/" + String(i) + "/")
+                        .then(response => {
+                            promises[2].push(response);
+                        })
+                }
+                // if url works, then just push the response
+                else {
+                    promises[2].push(response);
+                }
+            })
     }
 
     Promise.all(promises[2])
@@ -177,6 +194,8 @@ function loadRestOfData() {
             console.log(err);
         });
 }
+
+//function 
 
 function fetchSpeciesInfo(pokemon) {
     /* 
