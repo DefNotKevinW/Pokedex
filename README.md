@@ -1,6 +1,6 @@
-# Pokedex
+# Pokedex ![alt text](https://img.shields.io/website?url=https%3A%2F%2Fdefnotkevinw.github.io%2FPokedex%2F) ![GitHub last commit](https://img.shields.io/github/last-commit/DefNotKevinW/Pokedex)
 
-This is a pokedex webpage built using HTML, CSS, and Javascript. The data is provided by https://pokeapi.co/. 
+This is a pokedex webpage built using HTML, CSS, and Javascript. The data is provided by https://pokeapi.co/.
 
 ## Screenshots
 ![alt text](https://github.com/DefNotKevinW/Pokedex/blob/main/Screenshots/Main%20Page.png)
